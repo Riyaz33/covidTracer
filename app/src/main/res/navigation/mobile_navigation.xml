@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_updates">
+
+    <fragment
+        android:id="@+id/navigation_updates"
+        android:name="com.cs446.covidtracer.ui.updates.UpdatesFragment"
+        android:label="@string/title_updates"
+        tools:layout="@layout/fragment_updates" />
+
+    <fragment
+        android:id="@+id/navigation_tracing"
+        android:name="com.cs446.covidtracer.ui.tracing.TracingFragment"
+        android:label="@string/title_tracing"
+        tools:layout="@layout/fragment_tracing" />
+
+    <fragment
+        android:id="@+id/navigation_tester"
+        android:name="com.cs446.covidtracer.ui.tester.TesterFragment"
+        android:label="@string/title_tester"
+        tools:layout="@layout/fragment_tester" />
+</navigation>
