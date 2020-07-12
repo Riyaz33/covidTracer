@@ -6,6 +6,26 @@
     android:layout_height="match_parent"
     tools:context=".ui.tracing.TracingFragment">
 
+    <Button
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:text="@string/scan"
+        android:id="@+id/start_scan_button"
+        android:layout_marginTop="40dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:text="@string/stop_scanning"
+        android:id="@+id/stop_scan_button"
+        android:layout_marginTop="40dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
     <TextView
         android:id="@+id/text_tracing"
         android:layout_width="match_parent"

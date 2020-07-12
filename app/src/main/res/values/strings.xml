@@ -3,4 +3,6 @@
     <string name="title_updates">Updates</string>
     <string name="title_tracing">Tracing</string>
     <string name="title_tester">Tester</string>
+    <string name="scan">Scan</string>
+    <string name="stop_scanning">Stop Scanning</string>
 </resources>
