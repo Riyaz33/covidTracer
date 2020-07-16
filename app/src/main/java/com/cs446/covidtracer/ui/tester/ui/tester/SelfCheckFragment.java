@@ -2,6 +2,7 @@ package com.cs446.covidtracer.ui.tester.ui.tester;
 
 import androidx.lifecycle.ViewModelProviders;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
@@ -12,12 +13,17 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.NumberPicker;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.cs446.covidtracer.MainActivity;
 import com.cs446.covidtracer.R;
+
+import static androidx.core.content.ContextCompat.getSystemService;
 
 public class SelfCheckFragment extends Fragment {
 
@@ -31,6 +37,8 @@ public class SelfCheckFragment extends Fragment {
     private Button continueButton;
     private int stage;
     private RadioGroup yesNo;
+    private EditText age;
+    private int sick;
 
     @Nullable
     @Override
@@ -38,7 +46,7 @@ public class SelfCheckFragment extends Fragment {
             @Nullable Bundle savedInstanceState) {
 
         stage = 0;
-
+        sick = 0;
         View root = inflater.inflate(R.layout.self_check_fragment, container, false);
 
         quitButton = (Button) root.findViewById(R.id.quitButton);
@@ -77,15 +85,27 @@ public class SelfCheckFragment extends Fragment {
                 System.out.println("stage " + stage);
                 if(checkedId  == R.id.yesRadio){
                     Log.d("myapp", "clicked yes");
-                    if(stage != 1){
-                       stage = -2;
-                    } else
-                        stage = -1;
+                    if(stage == 0){
+                       stage = -1;
+                    }
+                    else if (stage == 1)
+                        sick = 1;
+                    else if (sick == 1 && stage == 2)
+                        stage = -2;
+                    else if(sick == 0 && stage == 2){
+                        stage = 3;
+                    }
+                   // else if (stage == 2)
                     System.out.println("stage after clicked yes " + stage);
 
                 } else if (checkedId == R.id.noRadio){
                     System.out.println("clicked No");
-                    stage = 1;
+                    if(stage == 0){
+                        stage = 1;
+                    }
+                    else if(stage == 1){
+                        sick = 0;
+                    }
                     System.out.println("stage after clicked no " + stage);
 
                 }
@@ -94,13 +114,16 @@ public class SelfCheckFragment extends Fragment {
 
         ((ViewGroup) yesNo.getParent()).removeView(yesNo);
 
+        age = (EditText) root.findViewById(R.id.age);
+        ((ViewGroup) age.getParent()).removeView(age);
+
+
         return  root;
     }
 
     private void nextQuestion() {
         System.out.println("switch stage " + stage);
-        if(stage == 0) {
-            //((ViewGroup) disclaimerText.getParent()).removeView(disclaimerText);
+        if (stage == 0) {
             ((ViewGroup) disclaimerText.getParent()).addView(yesNo);
 
             disclaimerText.setText("Do you have any of these symptoms? \n " +
@@ -108,7 +131,15 @@ public class SelfCheckFragment extends Fragment {
                     "chest pain");
             continueButton.setText("Continue");
         } else if (stage == 1) {
-            disclaimerText.setText("Do you have any of these symptons? \n cough");
+            disclaimerText.setText("Do you have any of these symptoms? \n cough");
+
+        } else if (stage == 2){
+            // ask age
+            disclaimerText.setText("What is your age? \n" +
+                    "Leave blank if you prefer not to answer.\n" +
+                    " Leaving it blank will affect the accuracy of the test" );
+            ((ViewGroup) yesNo.getParent()).addView(age);
+            ((ViewGroup) yesNo.getParent()).removeView(yesNo);
 
         } else if (stage == -1) {
             System.out.println("case -1 " + stage);
@@ -116,10 +147,19 @@ public class SelfCheckFragment extends Fragment {
             ((ViewGroup) yesNo.getParent()).removeView(yesNo);
             ((ViewGroup) continueButton.getParent()).removeView(continueButton);
         } else if (stage == -2) {
+            age.setInputType(0);
+
             disclaimerText.setText("yes get tested");
             ((ViewGroup) yesNo.getParent()).removeView(yesNo);
             ((ViewGroup) continueButton.getParent()).removeView(continueButton);
-            System.out.println("Finally ");
+        }  else if(stage == 3){
+            age.setInputType(0);
+            disclaimerText.setText("you are in god health good job \n" +
+                    "stay healthy");
+            ((ViewGroup) continueButton.getParent()).removeView(continueButton);
+
+            ((ViewGroup) age.getParent()).removeView(age);
+
         }
         stage++;
     }
