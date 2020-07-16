@@ -35,18 +35,18 @@ public class SelfCheckFragment extends Fragment {
     private Button quitButton;
     private TextView disclaimerText;
     private Button continueButton;
-    private int stage;
+    private static int stage;
     private RadioGroup yesNo;
     private EditText age;
-    private int sick;
+    private static int sick;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
             @Nullable Bundle savedInstanceState) {
 
-        stage = 0;
-        sick = 0;
+        SelfCheckFragment.stage = 0;
+        SelfCheckFragment.sick = 0;
         View root = inflater.inflate(R.layout.self_check_fragment, container, false);
 
         quitButton = (Button) root.findViewById(R.id.quitButton);
@@ -59,12 +59,12 @@ public class SelfCheckFragment extends Fragment {
 
         disclaimerText = (TextView) root.findViewById(R.id.disclaimer);
         disclaimerText.setText("Complete this test and you will get a recommendation \n'" +
-                "If this isa  medical emergency, call 911" +
+                "If this is a  medical emergency, call 911" +
                 "Disclaimer: \n" +
-                "TThis is not an official COVID-19 test. \n " +
-                "....\n " +
-                "Test is based on information provided by the Government of Canada COVID-19 Website. \n" +
-                "If you have questions, consult a health care provider <link to public health units> ");
+                "This is not an official COVID-19 test. \n " +
+                "This test will help you diagnose your current situation.\n " +
+                "The test is based on information provided by the Government of Canada COVID-19 Website. \n" +
+                "If you have questions, consult a health care provider. "); // todo: add links to public health providers
 
 
         continueButton = (Button) root.findViewById(R.id.startTest);
@@ -82,33 +82,35 @@ public class SelfCheckFragment extends Fragment {
         yesNo.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                System.out.println("stage " + stage);
+                System.out.println("stage " + SelfCheckFragment.stage);
+                System.out.println("sick " + SelfCheckFragment.sick);
                 if(checkedId  == R.id.yesRadio){
                     Log.d("myapp", "clicked yes");
-                    if(stage == 0){
-                       stage = -1;
+                    if(SelfCheckFragment.stage == 1){
+                        SelfCheckFragment.stage = -1;
                     }
-                    else if (stage == 1)
-                        sick = 1;
-                    else if (sick == 1 && stage == 2)
-                        stage = -2;
-                    else if(sick == 0 && stage == 2){
-                        stage = 3;
+                    else if (SelfCheckFragment.stage == 2)
+                        SelfCheckFragment.sick = 1;
+                    else if (SelfCheckFragment.sick == 1 && SelfCheckFragment.stage == 3)
+                        SelfCheckFragment.stage = -2;
+                    else if(SelfCheckFragment.sick == 0 && SelfCheckFragment.stage == 3){
+                        SelfCheckFragment.stage = 3;
                     }
-                   // else if (stage == 2)
-                    System.out.println("stage after clicked yes " + stage);
+                    System.out.println("stage after clicked yes " + SelfCheckFragment.stage);
 
                 } else if (checkedId == R.id.noRadio){
                     System.out.println("clicked No");
-                    if(stage == 0){
-                        stage = 1;
+                    if(SelfCheckFragment.stage == 0){
+                        SelfCheckFragment.stage = 1;
                     }
-                    else if(stage == 1){
-                        sick = 0;
+                    else if(SelfCheckFragment.stage == 1){
+                        SelfCheckFragment.sick = 0;
+
                     }
-                    System.out.println("stage after clicked no " + stage);
+                    System.out.println("stage after clicked no " + SelfCheckFragment.stage);
 
                 }
+
             }
         });
 
@@ -122,46 +124,56 @@ public class SelfCheckFragment extends Fragment {
     }
 
     private void nextQuestion() {
-        System.out.println("switch stage " + stage);
-        if (stage == 0) {
+        System.out.println("switch stage " + SelfCheckFragment.stage);
+        if (SelfCheckFragment.stage == 0) {
             ((ViewGroup) disclaimerText.getParent()).addView(yesNo);
 
             disclaimerText.setText("Do you have any of these symptoms? \n " +
-                    "cant breathe (RIP) \n" +
-                    "chest pain");
+                    "- Tough time breathing \n" +
+                    "- Chest pain\n" +
+                    "- Confusion\n" +
+                    "- Losing consciousness");
             continueButton.setText("Continue");
-        } else if (stage == 1) {
-            disclaimerText.setText("Do you have any of these symptoms? \n cough");
-
-        } else if (stage == 2){
+        } else if (SelfCheckFragment.stage == 1) {
+            disclaimerText.setText("Do you have any of these symptoms? \n " +
+                    "- Cough\n" +
+                    "- Pink eye \n" +
+                    "- Fever\n" +
+                    "- Chills \n" +
+                    "- Shortness of breath \n" +
+                    "- Sore throat");
+            yesNo.clearCheck();
+        } else if (SelfCheckFragment.stage == 2 && SelfCheckFragment.sick ==0){
             // ask age
             disclaimerText.setText("What is your age? \n" +
-                    "Leave blank if you prefer not to answer.\n" +
-                    " Leaving it blank will affect the accuracy of the test" );
+                    "You may leave this blank.\n" +
+                    "Leaving it blank will affect the accuracy of the test" );
             ((ViewGroup) yesNo.getParent()).addView(age);
             ((ViewGroup) yesNo.getParent()).removeView(yesNo);
 
-        } else if (stage == -1) {
-            System.out.println("case -1 " + stage);
-            disclaimerText.setText("Stop this and go to the hospital");
+        } else if (SelfCheckFragment.stage == -1) {
+            System.out.println("case -1 " + SelfCheckFragment.stage);
+            disclaimerText.setText("Please visit your local health care provider ASAP.");
             ((ViewGroup) yesNo.getParent()).removeView(yesNo);
             ((ViewGroup) continueButton.getParent()).removeView(continueButton);
-        } else if (stage == -2) {
+        } else if (SelfCheckFragment.sick == 1) {
             age.setInputType(0);
 
-            disclaimerText.setText("yes get tested");
+            disclaimerText.setText("You are showing some symptoms of COVID-19.\n\n" +
+                    "We recommend you should get an official COVID-19 Test.\n" +
+                    "Click here to find out how you can get tested");//todo
             ((ViewGroup) yesNo.getParent()).removeView(yesNo);
             ((ViewGroup) continueButton.getParent()).removeView(continueButton);
-        }  else if(stage == 3){
+        }  else if(SelfCheckFragment.stage == 3){
             age.setInputType(0);
-            disclaimerText.setText("you are in god health good job \n" +
-                    "stay healthy");
+            disclaimerText.setText("You are in good health. \n\n" +
+                    "Stay healthy by practicing social distancing, wearing a mask, and washing your hands frequently");
             ((ViewGroup) continueButton.getParent()).removeView(continueButton);
 
             ((ViewGroup) age.getParent()).removeView(age);
 
         }
-        stage++;
+        SelfCheckFragment.stage++;
     }
 
     private void returnHome() {
