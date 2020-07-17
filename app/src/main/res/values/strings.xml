@@ -8,4 +8,13 @@
     <string name="self_check_description">Click the button below to start the COVID-19 self-check test if you’re worried you were exposed to COVID-19.</string>
     <string name="selfcheckfragment">SelfCheckFragment</string>
     <string name="return_home">Return Home</string>
+    <string name="covid_status_title">Your COVID-19 Status</string>
+    <string name="covid_status_description">Current Status: %1$s</string>
+    <string name="covid_status_update_button_title">Update Status</string>
+    <string name="covid_status_dialog_title">Update Your COVID-19 Status</string>
+    <string-array name="covid_status_update_choices">
+        <item>Positive</item>
+        <item>Negative</item>
+    </string-array>
+    <string name="covid_status_shared_pref">covid_status</string>
 </resources>
