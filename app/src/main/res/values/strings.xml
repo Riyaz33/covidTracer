@@ -2,10 +2,10 @@
     <string name="app_name">Covid Tracer</string>
     <string name="title_updates">Updates</string>
     <string name="title_tracing">Tracing</string>
-    <string name="title_tester">Self Check</string>
-    <string name="covid_19_self_check">COVID-19 Self-Check</string>
-    <string name="self_check">Self-Check</string>
-    <string name="self_check_description">Click the button below to start the COVID-19 self-check test if you’re worried you were exposed to COVID-19.</string>
+    <string name="title_tester">Self Test</string>
+    <string name="covid_19_self_check">COVID-19 Self-Test</string>
+    <string name="self_check">Self Test</string>
+    <string name="self_check_description">Click the button below to start the COVID-19 self-test if you’re worried you were exposed to COVID-19.</string>
     <string name="selfcheckfragment">SelfCheckFragment</string>
-    <string name="return_home">Return Home</string>
+    <string name="return_home">Leave Test</string>
 </resources>
