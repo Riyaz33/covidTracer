@@ -8,4 +8,12 @@
     <string name="self_check_description">Click the button below to start the COVID-19 self-check test if you’re worried you were exposed to COVID-19.</string>
     <string name="selfcheckfragment">SelfCheckFragment</string>
     <string name="return_home">Return Home</string>
+    <string name="no_internet_connection">No internet connection.</string>
+    <string name="no_summaries">No summaries found.</string>
+    <string name="tests">Tests</string>
+    <string name="total">Total</string>
+    <string name="active">Active</string>
+    <string name="recovered">Recovered</string>
+    <string name="deaths">Deaths</string>
+    <string name="search_hint">Search Province</string>
 </resources>
