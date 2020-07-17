@@ -23,13 +23,13 @@ public class TracingFragment extends Fragment {
         tracingViewModel =
                 new ViewModelProvider(this).get(TracingViewModel.class);
         View root = inflater.inflate(R.layout.fragment_tracing, container, false);
-        final TextView textView = root.findViewById(R.id.text_tracing);
-        tracingViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
-            }
-        });
+//        final TextView textView = root.findViewById(R.id.text_tracing);
+//        tracingViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
+//            @Override
+//            public void onChanged(@Nullable String s) {
+//                textView.setText(s);
+//            }
+//        });
         return root;
     }
 }
