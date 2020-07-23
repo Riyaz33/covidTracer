@@ -43,8 +43,8 @@ public class TracingFragment extends Fragment {
                 new ViewModelProvider(this).get(TracingViewModel.class);
         View root = inflater.inflate(R.layout.fragment_tracing, container, false);
 
-        final TextView textView = root.findViewById(R.id.text_tracing);
-        textView.setMovementMethod(new ScrollingMovementMethod());
+        peripheralTextView = root.findViewById(R.id.text_tracing);
+        peripheralTextView.setMovementMethod(new ScrollingMovementMethod());
 
         startScanningButton = (Button) root.findViewById(R.id.start_scan_button);
         startScanningButton.setOnClickListener(new View.OnClickListener() {
@@ -63,26 +63,31 @@ public class TracingFragment extends Fragment {
 
         btManager = (BluetoothManager)getActivity().getSystemService(Context.BLUETOOTH_SERVICE);
         btAdapter = btManager.getAdapter();
-        btScanner = btAdapter.getBluetoothLeScanner();
+        if (btAdapter != null) {
+            btScanner = btAdapter.getBluetoothLeScanner();
 
-        if (btAdapter != null && !btAdapter.isEnabled()) {
-            Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivityForResult(enableIntent,REQUEST_ENABLE_BT);
-        }
+            if (btAdapter != null && !btAdapter.isEnabled()) {
+                Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                startActivityForResult(enableIntent,REQUEST_ENABLE_BT);
+            }
 
-        // Make sure we have access coarse location enabled, if not, prompt the user to enable it
-        if (getActivity().checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            builder.setTitle("This app needs location access");
-            builder.setMessage("Please grant location access so this app can detect peripherals.");
-            builder.setPositiveButton(android.R.string.ok, null);
-            builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                @Override
-                public void onDismiss(DialogInterface dialog) {
-                    requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, PERMISSION_REQUEST_COARSE_LOCATION);
-                }
-            });
-            builder.show();
+            // Make sure we have access coarse location enabled, if not, prompt the user to enable it
+            if (getActivity().checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setTitle("This app needs location access");
+                builder.setMessage("Please grant location access so this app can detect peripherals.");
+                builder.setPositiveButton(android.R.string.ok, null);
+                builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, PERMISSION_REQUEST_COARSE_LOCATION);
+                    }
+                });
+                builder.show();
+            }
+        } else {
+            peripheralTextView.setText("Bluetooth not supported on this device.");
+            startScanningButton.setVisibility(View.INVISIBLE);
         }
 
         return root;
