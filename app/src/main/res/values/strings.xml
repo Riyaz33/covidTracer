@@ -2,7 +2,38 @@
     <string name="app_name">Covid Tracer</string>
     <string name="title_updates">Updates</string>
     <string name="title_tracing">Tracing</string>
-    <string name="title_tester">Tester</string>
+    <string name="title_tester">Self Test</string>
+    <string name="covid_19_self_check">COVID-19 Self-Test</string>
+    <string name="self_check">Self Test</string>
+    <string name="self_check_description">Click the button below to start the COVID-19 self-test if you’re worried you were exposed to COVID-19.</string>
+    <string name="selfcheckfragment">SelfCheckFragment</string>
+    <string name="return_home">Leave Test</string>
+    <string name="covid_status_title">Your COVID-19 Status</string>
+    <string name="covid_status_description">Current Status: %1$s</string>
+    <string name="covid_status_update_button_title">Update Status</string>
+    <string name="covid_status_dialog_title">Update Your COVID-19 Status</string>
+    <string-array name="covid_status_update_choices">
+        <item>Positive</item>
+        <item>Negative</item>
+    </string-array>
+    <string name="covid_status_shared_pref">covid_status</string>
+    <string name="high_risk">High Risk</string>
+    <string name="moderate_risk">Medium Risk</string>
+    <string name="low_risk">Low Risk</string>
+    <string name="less_days_ago">4-5 Days Ago</string>
+    <string name="more_days_ago">7-8 Days Ago</string>
+    <string name="less_time">10-20 Mins</string>
+    <string name="more_time">30-40 Mins</string>
     <string name="scan">Scan</string>
     <string name="stop_scanning">Stop Scanning</string>
+    <string name="show_details">Show Details</string>
+    <string name="no_internet_connection">No internet connection.</string>
+    <string name="no_summaries">No summaries found.</string>
+    <string name="tests">Tests</string>
+    <string name="total">Total</string>
+    <string name="active">Active</string>
+    <string name="recovered">Recovered</string>
+    <string name="deaths">Deaths</string>
+    <string name="search_hint">Search Province</string>
+>>>>>>> master
 </resources>
