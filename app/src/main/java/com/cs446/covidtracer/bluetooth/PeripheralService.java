@@ -59,7 +59,7 @@ public class PeripheralService extends Service {
                 notificationIntent, 0);
 
         notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        String channelId = "covid tracer";
+        String channelId = "Covid Tracer";
         NotificationChannel notificationChannel = new NotificationChannel(channelId, channelId, NotificationManager.IMPORTANCE_DEFAULT);
         notificationChannel.setDescription(channelId);
         notificationChannel.setSound(null, null);
@@ -91,7 +91,6 @@ public class PeripheralService extends Service {
          */
         if (mBluetoothAdapter == null || !mBluetoothAdapter.isEnabled()) {
             //Bluetooth is disabled
-            Log.i(TAG, "Bluetooth is disabled");
             Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivity(enableBtIntent);
             return;
@@ -104,7 +103,6 @@ public class PeripheralService extends Service {
          */
         if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
             Toast.makeText(this, "No LE Support.", Toast.LENGTH_SHORT).show();
-            Log.i(TAG, "No LE Support");
             return;
         }
 
