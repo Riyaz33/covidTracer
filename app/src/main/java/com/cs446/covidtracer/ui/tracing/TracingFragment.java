@@ -23,8 +23,16 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.cs446.covidtracer.R;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.TimeZone;
 
 public class TracingFragment extends Fragment {
     BluetoothManager btManager;
@@ -36,6 +44,9 @@ public class TracingFragment extends Fragment {
     private final static int REQUEST_ENABLE_BT = 1;
     private static final int PERMISSION_REQUEST_COARSE_LOCATION = 1;
     private TracingViewModel tracingViewModel;
+    private RecyclerView mRecyclerView;
+    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -63,6 +74,40 @@ public class TracingFragment extends Fragment {
 
         btManager = (BluetoothManager)getActivity().getSystemService(Context.BLUETOOTH_SERVICE);
         btAdapter = btManager.getAdapter();
+
+        // start item list
+        ArrayList<TracingItem> tracingItems = new ArrayList<>();
+        try {
+            tracingItems.add(new TracingItem("abcdef", -50, "20-07-2020 08:00:00 PM", "20-07-2020 08:10:00 PM")); // High
+            tracingItems.add(new TracingItem("abcdefg", -60, "20-07-2020 08:00:00 PM", "20-07-2020 08:10:00 PM")); // High
+            tracingItems.add(new TracingItem("abcdef", -70, "20-07-2020 08:00:00 PM", "20-07-2020 08:10:00 PM")); // Moderate
+            tracingItems.add(new TracingItem("abcdefg", -80, "20-07-2020 08:00:00 PM", "20-07-2020 08:10:00 PM")); // Moderate
+            tracingItems.add(new TracingItem("abcdef", -90, "20-07-2020 08:00:00 PM", "20-07-2020 08:10:00 PM")); // Low
+            tracingItems.add(new TracingItem("abcdefg", -100, "20-07-2020 08:00:00 PM", "20-07-2020 08:10:00 PM")); // Low
+            tracingItems.add(new TracingItem("abcdef", -50, "20-07-2020 08:00:00 PM", "20-07-2020 08:05:00 PM")); // High
+            tracingItems.add(new TracingItem("abcdefg", -60, "20-07-2020 08:00:00 PM", "20-07-2020 08:05:00 PM")); // Moderate
+            tracingItems.add(new TracingItem("abcdef", -70, "20-07-2020 08:00:00 PM", "20-07-2020 08:05:00 PM")); // Moderate
+            tracingItems.add(new TracingItem("abcdefg", -80, "20-07-2020 08:00:00 PM", "20-07-2020 08:05:00 PM")); // Low
+            tracingItems.add(new TracingItem("abcdef", -90, "20-07-2020 08:00:00 PM", "20-07-2020 08:05:00 PM")); // Low
+            tracingItems.add(new TracingItem("abcdefg", -100, "20-07-2020 08:00:00 PM", "20-07-2020 08:05:00 PM")); // Low
+            tracingItems.add(new TracingItem("abcdef", -50, "20-07-2020 08:00:00 PM", "20-07-2020 08:01:00 PM")); // High
+            tracingItems.add(new TracingItem("abcdefg", -60, "20-07-2020 08:00:00 PM", "20-07-2020 08:01:00 PM")); // Moderate
+            tracingItems.add(new TracingItem("abcdef", -70, "20-07-2020 08:00:00 PM", "20-07-2020 08:01:00 PM")); // low
+            tracingItems.add(new TracingItem("abcdefg", -80, "20-07-2020 08:00:00 PM", "20-07-2020 08:01:00 PM")); // low
+            tracingItems.add(new TracingItem("abcdef", -90, "20-07-2020 08:00:00 PM", "20-07-2020 08:01:00 PM")); // low
+            tracingItems.add(new TracingItem("abcdefg", -100, "20-07-2020 08:00:00 PM", "20-07-2020 08:01:00 PM")); // low
+            mRecyclerView = root.findViewById(R.id.tracingRecyclerView);
+            mRecyclerView.setHasFixedSize(true);
+            mLayoutManager = new LinearLayoutManager(getActivity());
+            mAdapter = new TracingAdapter(tracingItems);
+            mRecyclerView.setLayoutManager(mLayoutManager);
+            mRecyclerView.setAdapter(mAdapter);
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        // end
+
         if (btAdapter != null) {
             btScanner = btAdapter.getBluetoothLeScanner();
 

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"    xmlns:app="http://schemas.android.com/apk/res-auto"
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -7,137 +8,36 @@
     tools:context=".ui.tracing.TracingFragment"
     tools:visibility="visible">
 
-    <androidx.cardview.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        app:cardBackgroundColor="#F44336"
-        app:cardUseCompatPadding="true"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteX="1dp">
-
-        <TextView
-            android:id="@+id/textView3"
-            android:layout_width="110dp"
-            android:layout_height="76dp"
-            android:layout_marginStart="15sp"
-            android:layout_marginTop="8sp"
-            android:text="@string/high_risk"
-            android:textColor="#FFFFFF"
-            android:textSize="30sp" />
-
-        <TextView
-            android:id="@+id/textView4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="150sp"
-            android:layout_marginTop="20sp"
-            android:text="@string/less_days_ago"
-            android:textColor="#FFFFFF"
-            tools:textSize="20sp" />
-
-        <TextView
-            android:id="@+id/textView5"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="150sp"
-            android:layout_marginTop="50sp"
-            android:text="@string/more_time"
-            android:textColor="#FFFFFF"
-            tools:textSize="20sp" />
-
-
-        <ImageView
-            android:id="@+id/imageView2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:layout_marginTop="35dp"
-            android:layout_marginEnd="15sp"
-            android:elevation="10dp"
-            android:foregroundTint="#FFFFFF"
-            android:src="@drawable/ic_baseline_arrow_forward_ios_24"
-            android:contentDescription="@string/show_details"/>
-
-    </androidx.cardview.widget.CardView>
-
-    <androidx.cardview.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_marginTop="100dp"
-        app:cardBackgroundColor="#FF9800"
-        app:cardUseCompatPadding="true"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteX="1dp">
-
-        <TextView
-            android:id="@+id/textView6"
-            android:layout_width="110dp"
-            android:layout_height="76dp"
-            android:layout_marginStart="15sp"
-            android:layout_marginTop="8sp"
-            android:text="@string/moderate_risk"
-            android:textColor="#FFFFFF"
-            android:textSize="30sp" />
-
-        <TextView
-            android:id="@+id/textView7"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="150sp"
-            android:layout_marginTop="20sp"
-            android:text="@string/more_days_ago"
-            android:textColor="#FFFFFF"
-            tools:textSize="20sp" />
-
-        <TextView
-            android:id="@+id/textView8"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="150sp"
-            android:layout_marginTop="50sp"
-            android:text="@string/less_time"
-            android:textColor="#FFFFFF"
-            tools:textSize="20sp" />
-
-
-        <ImageView
-            android:id="@+id/imageView9"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:layout_marginTop="35dp"
-            android:layout_marginEnd="15sp"
-            android:elevation="10dp"
-            android:foregroundTint="#FFFFFF"
-            android:src="@drawable/ic_baseline_arrow_forward_ios_24"
-            android:contentDescription="@string/show_details"/>
-
-    </androidx.cardview.widget.CardView>
-
     <Button
+        android:id="@+id/start_scan_button"
         android:layout_width="100dp"
         android:layout_height="50dp"
-        android:text="@string/scan"
-        android:id="@+id/start_scan_button"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="300dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        android:layout_marginBottom="516dp"
+        android:text="@string/scan" />
 
     <Button
+        android:id="@+id/stop_scan_button"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
         android:text="@string/stop_scanning"
-        android:id="@+id/stop_scan_button"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/start_scan_button"/>
+        android:layout_toEndOf="@+id/start_scan_button"
+        app:layout_constraintTop_toTopOf="@+id/start_scan_button" />
 
     <TextView
         android:id="@+id/text_tracing"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
         app:layout_constraintStart_toStartOf="parent"
+        android:layout_toEndOf="@+id/stop_scan_button"
         app:layout_constraintTop_toBottomOf="@+id/start_scan_button"/>
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/tracingRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/darker_gray"
+        android:layout_marginTop="50dp"
+        android:padding="4dp"
+        android:scrollbars="vertical" />
+
+</RelativeLayout>
