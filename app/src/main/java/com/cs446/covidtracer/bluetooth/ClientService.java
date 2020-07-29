@@ -21,7 +21,6 @@ import android.bluetooth.le.ScanSettings;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.ParcelUuid;
@@ -41,11 +40,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-/**
- * Dave Smith
- * Date: 11/13/14
- * ClientActivity
- */
 public class ClientService extends Service {
     private static final String TAG = "ClientService";
 
@@ -178,14 +172,14 @@ public class ClientService extends Service {
                     .getCharacteristic(DeviceProfile.CHARACTERISTIC_OFFSET_UUID);
 
             mConnectedGatt.readCharacteristic(characteristic);
-            System.out.println("current offset: ---");
+            Log.i(TAG, "current offset: ---");
         }
     }
 
     private void updateDateText(long offset) {
         Date date = new Date(offset);
         String dateString = DateFormat.getDateTimeInstance().format(date);
-        System.out.println("current offset: " + dateString);
+        Log.i(TAG, "current offset: " + dateString);
     }
 
     /*
@@ -242,7 +236,7 @@ public class ClientService extends Service {
 
         private void processResult(ScanResult result) {
             BluetoothDevice device = result.getDevice();
-            Log.i(TAG, "New LE Device: " + device.getName() + " @ " + result.getRssi());
+            Log.i(TAG, "New LE Device: " + device.getAddress() + " @ " + result.getRssi());
             //Add it to the collection
             mDevices.put(device.hashCode(), device);
 
@@ -293,7 +287,7 @@ public class ClientService extends Service {
                 mHandler.post(new Runnable() {
                     @Override
                     public void run() {
-                        System.out.println("latest value: " + charValue);
+                        Log.i(TAG, "latest value: " + charValue);
                     }
                 });
 
@@ -321,7 +315,7 @@ public class ClientService extends Service {
             mHandler.post(new Runnable() {
                 @Override
                 public void run() {
-                    System.out.println("latest value: " + charValue);
+                    Log.i(TAG, "latest value: " + charValue);
                 }
             });
         }

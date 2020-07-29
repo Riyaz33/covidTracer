@@ -1,6 +1,10 @@
 package com.cs446.covidtracer.bluetooth;
 
-import android.app.Activity;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.app.Service;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGatt;
@@ -14,44 +18,61 @@ import android.bluetooth.le.AdvertiseCallback;
 import android.bluetooth.le.AdvertiseData;
 import android.bluetooth.le.AdvertiseSettings;
 import android.bluetooth.le.BluetoothLeAdvertiser;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
 import android.os.ParcelUuid;
 import android.util.Log;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.Toast;
+
+import androidx.core.app.NotificationCompat;
+
+import com.cs446.covidtracer.MainActivity;
 
 import java.util.ArrayList;
 
-/**
- * Dave Smith
- * Date: 11/13/14
- * PeripheralActivity
- */
-public class PeripheralActivity extends Activity {
-    private static final String TAG = "PeripheralActivity";
+public class PeripheralService extends Service {
+    private static final String TAG = "PeripheralService";
 
     private BluetoothManager mBluetoothManager;
     private BluetoothAdapter mBluetoothAdapter;
     private BluetoothLeAdvertiser mBluetoothLeAdvertiser;
     private BluetoothGattServer mGattServer;
+    private NotificationManager notificationManager;
 
     private ArrayList<BluetoothDevice> mConnectedDevices;
-    private ArrayAdapter<BluetoothDevice> mConnectedDevicesAdapter;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        ListView list = new ListView(this);
-        setContentView(list);
+    public IBinder onBind(Intent intent) {
+        return null;
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+
+        Intent notificationIntent = new Intent(this, MainActivity.class);
+
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0,
+                notificationIntent, 0);
+
+        notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        String channelId = "covid tracer";
+        NotificationChannel notificationChannel = new NotificationChannel(channelId, channelId, NotificationManager.IMPORTANCE_DEFAULT);
+        notificationChannel.setDescription(channelId);
+        notificationChannel.setSound(null, null);
+
+        notificationManager.createNotificationChannel(notificationChannel);
+        Notification notification = new NotificationCompat.Builder(this, channelId)
+                .setContentTitle("Covid Tracer")
+                .setContentText("Advertising to nearby devices...")
+                .setContentIntent(pendingIntent).build();
+
+        startForeground(1001, notification);
 
         mConnectedDevices = new ArrayList<BluetoothDevice>();
-        mConnectedDevicesAdapter = new ArrayAdapter<BluetoothDevice>(this,
-                android.R.layout.simple_list_item_1, mConnectedDevices);
-        list.setAdapter(mConnectedDevicesAdapter);
 
         /*
          * Bluetooth in Android 4.3+ is accessed via the BluetoothManager, rather than
@@ -62,17 +83,17 @@ public class PeripheralActivity extends Activity {
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
+    public void onStart(Intent intent, int startId) {
+        super.onStart(intent, startId);
         /*
          * We need to enforce that Bluetooth is first enabled, and take the
          * user to settings to enable it if they have not done so.
          */
         if (mBluetoothAdapter == null || !mBluetoothAdapter.isEnabled()) {
             //Bluetooth is disabled
+            Log.i(TAG, "Bluetooth is disabled");
             Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivity(enableBtIntent);
-            finish();
             return;
         }
 
@@ -83,7 +104,7 @@ public class PeripheralActivity extends Activity {
          */
         if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
             Toast.makeText(this, "No LE Support.", Toast.LENGTH_SHORT).show();
-            finish();
+            Log.i(TAG, "No LE Support");
             return;
         }
 
@@ -91,11 +112,10 @@ public class PeripheralActivity extends Activity {
          * Check for advertising support. Not all devices are enabled to advertise
          * Bluetooth LE data.
          */
-        if (!mBluetoothAdapter.isMultipleAdvertisementSupported()) {
-            Toast.makeText(this, "No Advertising Support.", Toast.LENGTH_SHORT).show();
-            finish();
-            return;
-        }
+//        if (!mBluetoothAdapter.isMultipleAdvertisementSupported()) {
+//            Toast.makeText(this, "No Advertising Support.", Toast.LENGTH_SHORT).show();
+//            return;
+//        }
 
         mBluetoothLeAdvertiser = mBluetoothAdapter.getBluetoothLeAdvertiser();
         mGattServer = mBluetoothManager.openGattServer(this, mGattServerCallback);
@@ -105,8 +125,8 @@ public class PeripheralActivity extends Activity {
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
+    public void onDestroy() {
+        super.onDestroy();
         stopAdvertising();
         shutdownServer();
     }
@@ -236,7 +256,7 @@ public class PeripheralActivity extends Activity {
                 mHandler.post(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(PeripheralActivity.this, "Time Offset Updated", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(PeripheralService.this, "Time Offset Updated", Toast.LENGTH_SHORT).show();
                     }
                 });
 
@@ -259,7 +279,7 @@ public class PeripheralActivity extends Activity {
                 .build();
 
         AdvertiseData data = new AdvertiseData.Builder()
-                .setIncludeDeviceName(true)
+                .setIncludeDeviceName(false)
                 .addServiceUuid(new ParcelUuid(DeviceProfile.SERVICE_UUID))
                 .build();
 
@@ -298,7 +318,7 @@ public class PeripheralActivity extends Activity {
         mHandler.post(new Runnable() {
             @Override
             public void run() {
-                setTitle(message);
+                Log.i(TAG, message);
             }
         });
     }
@@ -309,9 +329,9 @@ public class PeripheralActivity extends Activity {
             public void run() {
                 //This will add the item to our list and update the adapter at the same time.
                 if (toAdd) {
-                    mConnectedDevicesAdapter.add(device);
+                    mConnectedDevices.add(device);
                 } else {
-                    mConnectedDevicesAdapter.remove(device);
+                    mConnectedDevices.remove(device);
                 }
 
                 //Trigger our periodic notification once devices are connected

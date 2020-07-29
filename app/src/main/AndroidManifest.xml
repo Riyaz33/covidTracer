@@ -33,5 +33,6 @@
             </intent-filter>
         </activity>
         <service android:name="com.cs446.covidtracer.bluetooth.ClientService"/>
+        <service android:name="com.cs446.covidtracer.bluetooth.PeripheralService"/>
     </application>
 </manifest>

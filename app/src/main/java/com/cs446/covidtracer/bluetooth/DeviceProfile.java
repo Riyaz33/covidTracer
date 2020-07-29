@@ -18,11 +18,11 @@ public class DeviceProfile {
     /* Unique ids generated for this device by 'uuidgen'. Doesn't conform to any SIG profile. */
 
     //Service UUID to expose our time characteristics
-    public static UUID SERVICE_UUID = UUID.fromString("1706BBC0-88AB-4B8D-877E-2237916EE929");
+    public static UUID SERVICE_UUID = UUID.fromString("A56D2FD2-CC9F-406F-92D6-08D4E196FC81");
     //Read-only characteristic providing number of elapsed seconds since offset
-    public static UUID CHARACTERISTIC_ELAPSED_UUID = UUID.fromString("275348FB-C14D-4FD5-B434-7C3F351DEA5F");
+    public static UUID CHARACTERISTIC_ELAPSED_UUID = UUID.fromString("9591E684-C1B4-49F4-B6F7-6E551A1EB7EA");
     //Read-write characteristic for current offset timestamp
-    public static UUID CHARACTERISTIC_OFFSET_UUID = UUID.fromString("BD28E457-4026-4270-A99F-F9BC20182E15");
+    public static UUID CHARACTERISTIC_OFFSET_UUID = UUID.fromString("E202C6F5-42BD-4815-86F0-C728C669B499");
 
     public static String getStateDescription(int state) {
         switch (state) {

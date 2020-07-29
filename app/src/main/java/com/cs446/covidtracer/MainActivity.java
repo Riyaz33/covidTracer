@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.cs446.covidtracer.bluetooth.ClientService;
+import com.cs446.covidtracer.bluetooth.PeripheralService;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -29,8 +30,11 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
 
-        Intent intent = new Intent(this, ClientService.class);
-        startForegroundService(intent);
+        Intent bluetoothClient = new Intent(this, ClientService.class);
+        startForegroundService(bluetoothClient);
+
+        Intent bluetoothPeripheral = new Intent(this, PeripheralService.class);
+        startForegroundService(bluetoothPeripheral);
     }
 
 }
