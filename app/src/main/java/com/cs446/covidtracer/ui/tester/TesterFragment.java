@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,6 +62,8 @@ public class TesterFragment extends Fragment {
             }
 
         });
+        TextView linkTextView = root.findViewById(R.id.rec_links);
+        linkTextView.setMovementMethod(LinkMovementMethod.getInstance());
 
         selfTestStartButton = (Button) root.findViewById(R.id.selfTestStartButton);
         selfTestStartButton.setOnClickListener(new View.OnClickListener(){
