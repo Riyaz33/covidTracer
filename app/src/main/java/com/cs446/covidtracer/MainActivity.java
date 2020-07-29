@@ -1,7 +1,10 @@
 package com.cs446.covidtracer;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 
+import com.cs446.covidtracer.bluetooth.ClientService;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,6 +28,9 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
+
+        Intent intent = new Intent(this, ClientService.class);
+        startForegroundService(intent);
     }
 
 }
