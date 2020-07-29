@@ -44,7 +44,7 @@ public class TesterFragment extends Fragment {
             @Override
             public void onChanged(@Nullable String s) {
                 statusArray = getResources().getStringArray(R.array.covid_status_update_choices);
-                String defaultValue = statusArray[1];
+                String defaultValue = statusArray[0];
                 String statusValue = sharedPref.getString(getString(R.string.covid_status_shared_pref), defaultValue);
                 covid_status_description.setText(getString(R.string.covid_status_description, statusValue));
             }

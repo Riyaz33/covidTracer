@@ -13,8 +13,8 @@
     <string name="covid_status_update_button_title">Update Status</string>
     <string name="covid_status_dialog_title">Update Your COVID-19 Status</string>
     <string-array name="covid_status_update_choices">
-        <item>Positive</item>
         <item>Negative</item>
+        <item>Positive</item>
     </string-array>
     <string name="covid_status_shared_pref">covid_status</string>
     <string name="high_risk">High Risk</string>
