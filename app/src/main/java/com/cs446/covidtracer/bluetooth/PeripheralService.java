@@ -30,6 +30,7 @@ import android.widget.Toast;
 import androidx.core.app.NotificationCompat;
 
 import com.cs446.covidtracer.MainActivity;
+import com.cs446.covidtracer.R;
 
 import java.util.ArrayList;
 
@@ -66,6 +67,7 @@ public class PeripheralService extends Service {
 
         notificationManager.createNotificationChannel(notificationChannel);
         Notification notification = new NotificationCompat.Builder(this, channelId)
+                .setSmallIcon(R.mipmap.ic_launcher_round)
                 .setContentTitle("Covid Tracer")
                 .setContentText("Advertising to nearby devices...")
                 .setContentIntent(pendingIntent).build();
@@ -92,6 +94,7 @@ public class PeripheralService extends Service {
         if (mBluetoothAdapter == null || !mBluetoothAdapter.isEnabled()) {
             //Bluetooth is disabled
             Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            enableBtIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(enableBtIntent);
             return;
         }

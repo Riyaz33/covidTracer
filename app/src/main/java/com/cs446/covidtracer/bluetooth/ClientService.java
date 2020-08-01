@@ -33,6 +33,7 @@ import android.widget.Toast;
 import androidx.core.app.NotificationCompat;
 
 import com.cs446.covidtracer.MainActivity;
+import com.cs446.covidtracer.R;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
@@ -76,6 +77,7 @@ public class ClientService extends Service {
 
         notificationManager.createNotificationChannel(notificationChannel);
         Notification notification = new NotificationCompat.Builder(this, channelId)
+                .setSmallIcon(R.mipmap.ic_launcher_round)
                 .setContentTitle("Covid Tracer")
                 .setContentText("Scanning nearby devices...")
                 .setContentIntent(pendingIntent).build();
@@ -97,6 +99,7 @@ public class ClientService extends Service {
     @Override
     public void onStart(Intent intent, int startId) {
         super.onStart(intent, startId);
+
         /*
          * We need to enforce that Bluetooth is first enabled, and take the
          * user to settings to enable it if they have not done so.
@@ -118,8 +121,28 @@ public class ClientService extends Service {
             return;
         }
 
-        startScan();
+        discoverBLEDevices();
     }
+
+    private void discoverBLEDevices() {
+        startTimedScan.run();
+    }
+
+    private Runnable startTimedScan = new Runnable() {
+        @Override
+        public void run() {
+            mHandler.postDelayed(stopTimedScan, 6000);
+            startScan();
+        }
+    };
+
+    private Runnable stopTimedScan = new Runnable() {
+        @Override
+        public void run() {
+            stopScan();
+            mHandler.postDelayed(startTimedScan, 10);
+        }
+    };
 
     @Override
     public void onDestroy() {
@@ -195,7 +218,8 @@ public class ClientService extends Service {
         filters.add(scanFilter);
 
         ScanSettings settings = new ScanSettings.Builder()
-                .setScanMode(ScanSettings.SCAN_MODE_BALANCED)
+                .setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY)
+                .setCallbackType(ScanSettings.CALLBACK_TYPE_ALL_MATCHES)
                 .build();
         mBluetoothAdapter.getBluetoothLeScanner().startScan(filters, settings, mScanCallback);
     }
