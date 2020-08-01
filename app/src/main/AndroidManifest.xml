@@ -32,7 +32,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <service android:name="com.cs446.covidtracer.bluetooth.ClientService"/>
-        <service android:name="com.cs446.covidtracer.bluetooth.PeripheralService"/>
+        <service
+            android:name="com.cs446.covidtracer.bluetooth.ClientService"
+            android:foregroundServiceType="location"/>
+        <service
+            android:name="com.cs446.covidtracer.bluetooth.PeripheralService"
+            android:foregroundServiceType="location"/>
     </application>
 </manifest>

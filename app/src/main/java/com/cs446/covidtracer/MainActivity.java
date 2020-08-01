@@ -1,15 +1,19 @@
 package com.cs446.covidtracer;
 
+import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.cs446.covidtracer.bluetooth.ClientService;
 import com.cs446.covidtracer.bluetooth.PeripheralService;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -32,12 +36,25 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(navView, navController);
 
         if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
-            Intent bluetoothClient = new Intent(this, ClientService.class);
-            startForegroundService(bluetoothClient);
-
-            Intent bluetoothPeripheral = new Intent(this, PeripheralService.class);
-            startForegroundService(bluetoothPeripheral);
+            // We need to enforce that location permissions are enabled.
+            ActivityCompat.requestPermissions(MainActivity.this,
+                    new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
+                    1);
         }
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == 1) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Intent bluetoothClient = new Intent(this, ClientService.class);
+                startForegroundService(bluetoothClient);
+
+                Intent bluetoothPeripheral = new Intent(this, PeripheralService.class);
+                startForegroundService(bluetoothPeripheral);
+            } else {
+                Toast.makeText(MainActivity.this, "Contact tracing disabled. Location permissions must be granted to start contact tracing.", Toast.LENGTH_LONG).show();
+            }
+        }
+    }
 }

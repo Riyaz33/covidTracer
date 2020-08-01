@@ -30,6 +30,7 @@ import android.view.View;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 
 import com.cs446.covidtracer.MainActivity;
