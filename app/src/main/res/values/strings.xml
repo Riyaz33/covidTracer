@@ -36,4 +36,5 @@
     <string name="deaths">Deaths</string>
     <string name="search_hint">Search Province</string>
     <string name="learn_more"><a href="https://www.canada.ca/en/public-health/services/diseases/2019-novel-coronavirus-infection/prevention-risks.html/">Learn More About Prevention and Risks</a></string>
+    <string name="information">Information</string>
 </resources>

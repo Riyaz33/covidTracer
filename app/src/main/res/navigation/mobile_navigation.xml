@@ -22,4 +22,10 @@
         android:name="com.cs446.covidtracer.ui.tester.TesterFragment"
         android:label="@string/title_tester"
         tools:layout="@layout/fragment_tester" />
+
+    <fragment
+        android:id="@+id/navigation_information"
+        android:name="com.cs446.covidtracer.ui.information.InformationFragment"
+        android:label="@string/information"
+        tools:layout="@layout/fragment_information" />
 </navigation>
