@@ -30,13 +30,13 @@ import android.view.View;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 
 import com.cs446.covidtracer.MainActivity;
 import com.cs446.covidtracer.R;
 
 import java.text.DateFormat;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -49,6 +49,7 @@ public class ClientService extends Service {
     private BluetoothAdapter mBluetoothAdapter;
 
     private SparseArray<BluetoothDevice> mDevices;
+    private SparseArray<DeviceDetected> mDevicesDetected;
 
     private BluetoothGatt mConnectedGatt;
 
@@ -95,6 +96,7 @@ public class ClientService extends Service {
         mBluetoothAdapter = mBluetoothManager.getAdapter();
 
         mDevices = new SparseArray<BluetoothDevice>();
+        mDevicesDetected = new SparseArray<DeviceDetected>();
     }
 
     @Override
@@ -108,6 +110,7 @@ public class ClientService extends Service {
         if (mBluetoothAdapter == null || !mBluetoothAdapter.isEnabled()) {
             //Bluetooth is disabled
             Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            enableBtIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(enableBtIntent);
             return;
         }
@@ -141,6 +144,15 @@ public class ClientService extends Service {
         @Override
         public void run() {
             stopScan();
+            for(int i = 0; i < mDevicesDetected.size(); i++){
+                int hashCode = mDevicesDetected.keyAt(i);
+                DeviceDetected deviceDetected = mDevicesDetected.valueAt(i);
+                if (mDevices.get(hashCode) == null) {
+                    Log.i(TAG, "Saving to database: " + deviceDetected.firstDetection + " " + deviceDetected.device.getAddress() + " " + deviceDetected.rssis);
+                    mDevicesDetected.remove(hashCode);
+                }
+            }
+            mDevices.clear();
             mHandler.postDelayed(startTimedScan, 10);
         }
     };
@@ -221,6 +233,7 @@ public class ClientService extends Service {
         ScanSettings settings = new ScanSettings.Builder()
                 .setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY)
                 .setCallbackType(ScanSettings.CALLBACK_TYPE_ALL_MATCHES)
+                .setMatchMode(ScanSettings.MATCH_MODE_AGGRESSIVE)
                 .build();
         mBluetoothAdapter.getBluetoothLeScanner().startScan(filters, settings, mScanCallback);
     }
@@ -261,11 +274,16 @@ public class ClientService extends Service {
 
         private void processResult(ScanResult result) {
             BluetoothDevice device = result.getDevice();
-            Log.i(TAG, "New LE Device: " + device.getAddress() + " @ " + result.getRssi());
+            Log.i(TAG, Instant.now() + " New LE Device: " + device.getAddress() + " @ " + result.getRssi());
             //Add it to the collection
             mDevices.put(device.hashCode(), device);
 
-            stopScan();
+            DeviceDetected deviceDetected = mDevicesDetected.get(device.hashCode());
+            if (deviceDetected == null) {
+                mDevicesDetected.put(device.hashCode(), new DeviceDetected(Instant.now(), device, result.getRssi()));
+            } else {
+                deviceDetected.rssis.add(result.getRssi());
+            }
         }
     };
 
@@ -345,4 +363,16 @@ public class ClientService extends Service {
             });
         }
     };
+}
+
+class DeviceDetected {
+    public Instant firstDetection;
+    public BluetoothDevice device;
+    public ArrayList<Integer> rssis = new ArrayList<>();
+
+    DeviceDetected(Instant firstDetection, BluetoothDevice device, int rssi) {
+        this.firstDetection = firstDetection;
+        this.device = device;
+        this.rssis.add(rssi);
+    }
 }
