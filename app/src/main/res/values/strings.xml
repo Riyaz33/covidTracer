@@ -12,10 +12,6 @@
     <string name="covid_status_description">Current Status: %1$s</string>
     <string name="covid_status_update_button_title">Update Status</string>
     <string name="covid_status_dialog_title">Update Your COVID-19 Status</string>
-    <string-array name="covid_status_update_choices">
-        <item>Negative</item>
-        <item>Positive</item>
-    </string-array>
     <string name="covid_status_shared_pref">covid_status</string>
     <string name="high_risk">High Risk</string>
     <string name="moderate_risk">Medium Risk</string>
@@ -37,4 +33,8 @@
     <string name="search_hint">Search Province</string>
     <string name="learn_more"><a href="https://www.canada.ca/en/public-health/services/diseases/2019-novel-coronavirus-infection/prevention-risks.html/">Learn More About Prevention and Risks</a></string>
     <string name="information">Information</string>
+    <string-array name="covid_status_update_choices">
+        <item>Negative</item>
+        <item>Positive</item>
+    </string-array>
 </resources>
