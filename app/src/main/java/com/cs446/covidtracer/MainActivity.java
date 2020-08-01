@@ -1,6 +1,7 @@
 package com.cs446.covidtracer;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -30,11 +31,13 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
 
-        Intent bluetoothClient = new Intent(this, ClientService.class);
-        startForegroundService(bluetoothClient);
+        if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
+            Intent bluetoothClient = new Intent(this, ClientService.class);
+            startForegroundService(bluetoothClient);
 
-        Intent bluetoothPeripheral = new Intent(this, PeripheralService.class);
-        startForegroundService(bluetoothPeripheral);
+            Intent bluetoothPeripheral = new Intent(this, PeripheralService.class);
+            startForegroundService(bluetoothPeripheral);
+        }
     }
 
 }
