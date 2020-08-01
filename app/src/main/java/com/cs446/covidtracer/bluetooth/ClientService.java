@@ -18,9 +18,12 @@ import android.bluetooth.le.ScanCallback;
 import android.bluetooth.le.ScanFilter;
 import android.bluetooth.le.ScanResult;
 import android.bluetooth.le.ScanSettings;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.ParcelUuid;
@@ -34,6 +37,8 @@ import androidx.core.app.NotificationCompat;
 
 import com.cs446.covidtracer.MainActivity;
 import com.cs446.covidtracer.R;
+import com.cs446.covidtracer.bluetooth.data.BluetoothDbHelper;
+import com.cs446.covidtracer.bluetooth.data.DeviceContract;
 
 import java.text.DateFormat;
 import java.time.Instant;
@@ -135,7 +140,7 @@ public class ClientService extends Service {
     private Runnable startTimedScan = new Runnable() {
         @Override
         public void run() {
-            mHandler.postDelayed(stopTimedScan, 6000);
+            mHandler.postDelayed(stopTimedScan, 10000);
             startScan();
         }
     };
@@ -148,7 +153,8 @@ public class ClientService extends Service {
                 int hashCode = mDevicesDetected.keyAt(i);
                 DeviceDetected deviceDetected = mDevicesDetected.valueAt(i);
                 if (mDevices.get(hashCode) == null) {
-                    Log.i(TAG, "Saving to database: " + deviceDetected.firstDetection + " " + deviceDetected.device.getAddress() + " " + deviceDetected.rssis);
+                    Log.i(TAG, "Saving to database: " + deviceDetected.device.getAddress() + " " + deviceDetected.firstDetection + " " + deviceDetected.rssis);
+                    saveToDatabase(deviceDetected);
                     mDevicesDetected.remove(hashCode);
                 }
             }
@@ -156,6 +162,32 @@ public class ClientService extends Service {
             mHandler.postDelayed(startTimedScan, 10);
         }
     };
+
+    private void saveToDatabase(DeviceDetected deviceDetected) {
+        BluetoothDbHelper dbHelper = new BluetoothDbHelper(ClientService.this.getApplicationContext());
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        ContentValues entry = new ContentValues();
+        double rssiSum = 0;
+        for(int rssi : deviceDetected.rssis) {
+            rssiSum += rssi;
+        }
+
+        entry.put(DeviceContract.DeviceEntry.DEVICE_ADDRESS, deviceDetected.device.getAddress());
+        entry.put(DeviceContract.DeviceEntry.START_TIME, deviceDetected.firstDetection.getEpochSecond());
+        entry.put(DeviceContract.DeviceEntry.END_TIME, Instant.now().getEpochSecond());
+        entry.put(DeviceContract.DeviceEntry.AVERAGE_RSSI, rssiSum / deviceDetected.rssis.size());
+        db.insert(DeviceContract.DeviceEntry.TABLE_NAME, null, entry);
+
+//        Cursor result = db.query(DeviceContract.DeviceEntry.TABLE_NAME, null, null, null, null, null, null);
+//        for (result.moveToFirst(); !result.isAfterLast(); result.moveToNext()) {
+//            String address = result.getString(result.getColumnIndex(DeviceContract.DeviceEntry.DEVICE_ADDRESS));
+//            int startTime = result.getInt(result.getColumnIndex(DeviceContract.DeviceEntry.START_TIME));
+//            int endTime = result.getInt(result.getColumnIndex(DeviceContract.DeviceEntry.END_TIME));
+//            double averageRssi = result.getDouble(result.getColumnIndex(DeviceContract.DeviceEntry.AVERAGE_RSSI));
+//            Log.i(TAG, "Retrieved from database: " + address + " " + startTime + " " + endTime + " " + averageRssi);
+//        }
+//        result.close();
+    }
 
     @Override
     public void onDestroy() {
