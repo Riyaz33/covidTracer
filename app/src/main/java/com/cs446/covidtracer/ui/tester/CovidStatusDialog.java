@@ -27,9 +27,18 @@ public class CovidStatusDialog extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
         editor = sharedPref.edit();
+
+        String[] statusArray = getResources().getStringArray(R.array.covid_status_update_choices);
+        String defaultValue = statusArray[0];
+        String statusValue = sharedPref.getString(getString(R.string.covid_status_shared_pref), defaultValue);
+        int checked = 0;
+        if(statusValue.equals(statusArray[1])){
+            checked = 1;
+        }
+
         final String[] statusList = getActivity().getResources().getStringArray(R.array.covid_status_update_choices);
         builder.setTitle(R.string.covid_status_dialog_title)
-                .setSingleChoiceItems(R.array.covid_status_update_choices, position, new DialogInterface.OnClickListener() {
+                .setSingleChoiceItems(R.array.covid_status_update_choices, checked, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         position = which;
