@@ -33,8 +33,10 @@
     <string name="search_hint">Search Province</string>
     <string name="learn_more"><a href="https://www.canada.ca/en/public-health/services/diseases/2019-novel-coronavirus-infection/prevention-risks.html/">Learn More About Prevention and Risks</a></string>
     <string name="information">Information</string>
+    <string name="add_widget">Add widget</string>
     <string-array name="covid_status_update_choices">
         <item>Negative</item>
         <item>Positive</item>
     </string-array>
+    <string name="widget_header">Tracing Risk Updates</string>
 </resources>

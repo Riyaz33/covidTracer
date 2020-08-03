@@ -1,6 +1,9 @@
 package com.cs446.covidtracer;
 
 import android.Manifest;
+import android.app.PendingIntent;
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -8,6 +11,7 @@ import android.widget.Toast;
 
 import com.cs446.covidtracer.bluetooth.ClientService;
 import com.cs446.covidtracer.bluetooth.PeripheralService;
+import com.cs446.covidtracer.widget.RiskUpdatesWidgetProvider;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.annotation.NonNull;
@@ -39,6 +43,16 @@ public class MainActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(MainActivity.this,
                     new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
                     1);
+        }
+
+        AppWidgetManager appWidgetManager =
+                this.getSystemService(AppWidgetManager.class);
+        ComponentName myProvider =
+                new ComponentName(this, RiskUpdatesWidgetProvider.class);
+        if (appWidgetManager.isRequestPinAppWidgetSupported()) {
+            Intent pinnedWidgetCallbackIntent = new Intent( this, RiskUpdatesWidgetProvider.class );
+            PendingIntent successCallback = PendingIntent.getBroadcast(this, 0,
+                    pinnedWidgetCallbackIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         }
     }
 
