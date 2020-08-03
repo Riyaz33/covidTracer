@@ -38,8 +38,6 @@ import com.cs446.covidtracer.ui.updates.data.SummaryContract.SummaryEntry;
 
 public class UpdatesFragment extends Fragment implements LoaderCallbacks {
 
-    private UpdatesViewModel updatesViewModel;
-
     private static final String LOG_TAG = UpdatesFragment.class.getSimpleName();
 
     private static final String COVID_REQUEST_URL = "https://services9.arcgis.com/pJENMVYPQqZZe20v/arcgis/rest/services/" +

@@ -1,6 +1,4 @@
-package com.cs446.covidtracer.ui.tester.ui.tester;
-
-import androidx.lifecycle.ViewModelProviders;
+package com.cs446.covidtracer.ui.tester;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -26,7 +24,6 @@ public class SelfCheckFragment extends Fragment {
         return new SelfCheckFragment();
     }
 
-    private SelfCheckViewModel selfCheckViewModel;
     private Button quitButton;
     private TextView titleText;
     private TextView bodyText;
@@ -184,8 +181,6 @@ public class SelfCheckFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        selfCheckViewModel = ViewModelProviders.of(this).get(SelfCheckViewModel.class);
-        // TODO: Use the ViewModel
     }
 
 
