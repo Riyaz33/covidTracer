@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 import android.util.Pair;
 
 import com.cs446.covidtracer.ui.tracing.TracingItem;
@@ -22,6 +23,7 @@ public class PositiveDbHelper extends SQLiteOpenHelper {
      * Database version. If you change the database schema, you must increment the database version.
      */
     private static final int DATABASE_VERSION = 1;
+    private static final String TAG = "PositiveDbHelper";
 
     public PositiveDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -43,7 +45,7 @@ public class PositiveDbHelper extends SQLiteOpenHelper {
 
     }
 
-    public boolean addDevice(ArrayList<Pair<String, Integer>> positiveList) {
+    public boolean addDevice(ArrayList<Pair<String, Long>> positiveList) {
         SQLiteDatabase db = this.getWritableDatabase();
         if (positiveList.size() > 0) {
             String query = MessageFormat.format("REPLACE INTO {0}({1}, {2}) VALUES ", PositiveEntry.TABLE_NAME, PositiveEntry.DEVICE_ADDRESS, PositiveEntry.TIME_UPLOADED);
@@ -51,12 +53,14 @@ public class PositiveDbHelper extends SQLiteOpenHelper {
                 if (i != 0) {
                     query += ", ";
                 }
-                query += "(" + positiveList.get(i).first + ", " + positiveList.get(i).second + ")";
+                query += "('" +  positiveList.get(i).first + "', " + positiveList.get(i).second + ")";
             }
             try {
                 db.execSQL(query);
+                Log.d(TAG,"Added: "+query);
                 return true;
             } catch (Exception e) {
+                Log.d(TAG, "Exception:"+e);
                 return false;
             }
         }

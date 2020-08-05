@@ -19,6 +19,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -66,7 +67,10 @@ public class CovidStatusDialog extends DialogFragment {
                         editor.putString(getString(R.string.covid_status_shared_pref), statusList[position]);
                         editor.commit();
                         Map<String,Object> data = new HashMap<>();
+                        long epochTime = System.currentTimeMillis();
+                        String time = ""+epochTime;
                         data.put("userStatus",statusList[position]);
+                        data.put("timestamp",time);
                         DocumentReference doc = db.collection("Users").document( macAddr);
                         doc.update(data);
                         Intent intent = getActivity().getIntent();

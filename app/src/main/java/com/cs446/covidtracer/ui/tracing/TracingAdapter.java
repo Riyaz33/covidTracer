@@ -13,7 +13,9 @@ import com.cs446.covidtracer.R;
 
 import java.util.ArrayList;
 
-public class TracingAdapter extends RecyclerView.Adapter<TracingAdapter.TracingViewHolder>{
+import static com.cs446.covidtracer.ui.tracing.TracingAdapter.*;
+
+public class TracingAdapter extends RecyclerView.Adapter<TracingViewHolder>{
 
     private ArrayList<TracingItem> mTracingList;
 

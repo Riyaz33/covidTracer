@@ -10,10 +10,12 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Pair;
 import android.widget.Toast;
 
 import com.cs446.covidtracer.bluetooth.ClientService;
 import com.cs446.covidtracer.bluetooth.PeripheralService;
+import com.cs446.covidtracer.ui.tracing.data.PositiveDbHelper;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -110,8 +112,7 @@ public class MainActivity extends AppCompatActivity {
             editor.putString(regStat, "positive");
             editor.commit();
         }
-        // Get the local Bluetooth adapter
-
+        // Get new positive users
         db.collection("Users")
                 .whereEqualTo("userStatus", "Positive")
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
@@ -122,16 +123,23 @@ public class MainActivity extends AppCompatActivity {
                             Log.w(TAG, "Listen failed.", e);
                             return;
                         }
-                        Map<String,Object> User = new HashMap<>();
-                        List<Object> Users = new ArrayList<>();
+                      final PositiveDbHelper positiveDb = new PositiveDbHelper(getApplicationContext());
+                      ArrayList<Pair<String,Long>> list = new ArrayList<Pair<String,Long>>();
+                      List<Object> Users = new ArrayList<>();
                         for (QueryDocumentSnapshot doc : value) {
                             if (doc.get("userID") != null) {
                                String id = doc.getString("userID");
                                String timestamp = doc.getString("timestamp");
-                               User.put(id,timestamp);
+                                Long timestamp1 = Long.parseLong("0");
+                               if (timestamp != null) {
+                                  timestamp1 = Long.parseLong(timestamp);
+                               }
+                                Pair<String, Long> User = new Pair<String, Long>(id, timestamp1);
+                               list.add(User);
                             }
                         }
-                        Log.d(TAG, "Current Users that have tested positive: " + User);
+                        positiveDb.addDevice(list);
+                        //Log.d(TAG, "Current Users that have tested positive: ");
                     }
                 });
 
