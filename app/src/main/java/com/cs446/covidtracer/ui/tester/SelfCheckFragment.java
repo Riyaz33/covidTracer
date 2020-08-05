@@ -42,13 +42,14 @@ public class SelfCheckFragment extends Fragment {
     private TextView assessmentLink;
     private Button clipboardCopy;
     private ClipboardManager clipboardManager;
+    private SelfCheck selfCheckInfo;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
             @Nullable Bundle savedInstanceState) {
 
-        final SelfCheck selfCheckInfo = new SelfCheck();
+        selfCheckInfo = new SelfCheck();
 
         SelfCheckFragment.stage = 0;
         SelfCheckFragment.sick = 0;
@@ -93,11 +94,18 @@ public class SelfCheckFragment extends Fragment {
                     Log.d("myapp", "clicked yes");
                     if(SelfCheckFragment.stage == 1){
                         SelfCheckFragment.stage = -1;
+                        selfCheckInfo.setHasSevereSymptons(true);
+
                     }
-                    else if (SelfCheckFragment.stage == 2)
+                    else if (SelfCheckFragment.stage == 2) {
                         SelfCheckFragment.sick = 1;
-                    else if (SelfCheckFragment.stage == 4)
+                        selfCheckInfo.setHasCovidSymptoms(true);
+
+                    }
+                    else if (SelfCheckFragment.stage == 4) {
                         SelfCheckFragment.sick = 1;
+                        selfCheckInfo.setInAtRiskGroup(true);
+                    }
                     else if (SelfCheckFragment.sick == 1 && SelfCheckFragment.stage == 3)
                         SelfCheckFragment.stage = -2;
                     //else if (SelfCheckFragment.sick == 1 && SelfCheckFragment.stage == 4)
@@ -201,6 +209,8 @@ public class SelfCheckFragment extends Fragment {
             ((ViewGroup) continueButton.getParent()).removeView(continueButton);
             ((ViewGroup) quitButton.getParent()).removeView(bodyText);
             ((ViewGroup) titleText.getParent()).addView(clipboardCopy);
+            selfCheckInfo.setTestCompleted(true);
+
         } else if (SelfCheckFragment.sick == 1) {
             //age.setInputType(0);
 
@@ -212,16 +222,18 @@ public class SelfCheckFragment extends Fragment {
             ((ViewGroup) yesNo.getParent()).removeView(yesNo);
             ((ViewGroup) continueButton.getParent()).removeView(continueButton);
             ((ViewGroup) assessmentLink.getParent()).addView(clipboardCopy);
+            selfCheckInfo.setTestCompleted(true);
 
 
 
         }  else if(SelfCheckFragment.stage == 4){
             age.setInputType(0);
-            titleText.setText("You are not at risk for COVID-19.");
+            titleText.setText("You are not currently at risk for COVID-19.");
             bodyText.setText("Stay healthy by practicing social distancing, wearing a mask, and washing your hands frequently.");
             ((ViewGroup) continueButton.getParent()).removeView(continueButton);
             ((ViewGroup) titleText.getParent()).removeView(yesNo);
             ((ViewGroup) titleText.getParent()).addView(clipboardCopy);
+            selfCheckInfo.setTestCompleted(true);
 
         }
         SelfCheckFragment.stage++;
