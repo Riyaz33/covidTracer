@@ -78,7 +78,7 @@ public class SelfCheckFragment extends Fragment {
                 "Disclaimer:\n" +
                 "This is not an official COVID-19 test. It will help you diagnose your current situation.\n\n" +
                 "The test is based on information provided by the Government of Canada COVID-19 Website.\n" +
-                "If you have questions, consult a health care provider.");
+                "If you have questions, consult a health care provider. Your self-test results are not stored anywhere.");
 
         continueButton = (Button) root.findViewById(R.id.startTest);
 
