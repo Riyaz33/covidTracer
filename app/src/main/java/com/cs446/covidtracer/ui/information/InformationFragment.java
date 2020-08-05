@@ -31,8 +31,6 @@ public class InformationFragment extends Fragment {
         TextView d4 = (TextView) root.findViewById(R.id.whoAdvice4);
         d4.setMovementMethod(LinkMovementMethod.getInstance());
 
-        TextView d5 = (TextView) root.findViewById(R.id.whoAdvice5);
-        d5.setMovementMethod(LinkMovementMethod.getInstance());
 
         TextView d6 = (TextView) root.findViewById(R.id.whoAdvice6);
         d6.setMovementMethod(LinkMovementMethod.getInstance());

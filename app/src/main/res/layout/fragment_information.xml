@@ -25,12 +25,27 @@
         android:layout_width="390dp"
         android:layout_height="64dp"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="18dp"
+        android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"
         android:text="Below are resources from credible sources that you can use to learn more about the Coronavirus Pandemic"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/information" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="49dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="355dp"
+        android:layout_marginEnd="10dp"
+        android:text="@string/colour_marking"
+        android:textSize="10sp"
+        android:textStyle="italic"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/information" />
 
@@ -75,16 +90,6 @@
         app:layout_constraintTop_toBottomOf="@+id/whoAdvice" />
 
     <TextView
-        android:id="@+id/whoAdvice5"
-        android:layout_width="409dp"
-        android:layout_height="22dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="104dp"
-        android:text="@string/whoTravel"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/whoAdvice" />
-
-    <TextView
         android:id="@+id/whoAdvice6"
         android:layout_width="409dp"
         android:layout_height="22dp"
@@ -119,7 +124,7 @@
         android:layout_width="409dp"
         android:layout_height="22dp"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="232dp"
+        android:layout_marginTop="225dp"
         android:text="@string/whoFund"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/whoAdvice" />
@@ -128,39 +133,9 @@
         android:id="@+id/whoAdvice10"
         android:layout_width="409dp"
         android:layout_height="22dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="264dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="104dp"
         android:text="@string/ontarioAssessment"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/whoAdvice" />
-
-    <TextView
-        android:id="@+id/whoAdvice11"
-        android:layout_width="409dp"
-        android:layout_height="22dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="296dp"
-        android:text="@string/learn_more"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/whoAdvice" />
-
-    <TextView
-        android:id="@+id/whoAdvice12"
-        android:layout_width="409dp"
-        android:layout_height="22dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="328dp"
-        android:text="@string/assessmentLink"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/whoAdvice" />
-
-    <TextView
-        android:id="@+id/whoAdvice13"
-        android:layout_width="409dp"
-        android:layout_height="22dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="360dp"
-        android:text="@string/whoAdvice"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/whoAdvice" />
 
