@@ -201,7 +201,8 @@ public class MainActivity extends AppCompatActivity {
             mac += String.format("%02x:", n);
         }
         mac = mac.substring(0, mac.length() - 1);
-        return mac.toUpperCase();
+        // return mac.toUpperCase();
+        return "42:FC:A4:80:82:8D"; // test purpose
     }
 
     @Override

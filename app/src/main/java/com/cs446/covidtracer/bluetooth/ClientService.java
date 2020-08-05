@@ -172,8 +172,8 @@ public class ClientService extends Service {
             rssiSum += rssi;
         }
 
-        entry.put(DeviceContract.DeviceEntry.DEVICE_ADDRESS, deviceDetected.device.getAddress());
-        // entry.put(DeviceContract.DeviceEntry.DEVICE_ADDRESS, "42:FC:A4:80:82:8D");
+        // entry.put(DeviceContract.DeviceEntry.DEVICE_ADDRESS, deviceDetected.device.getAddress());
+        entry.put(DeviceContract.DeviceEntry.DEVICE_ADDRESS, "42:FC:A4:80:82:8D");
         entry.put(DeviceContract.DeviceEntry.START_TIME, deviceDetected.firstDetection.getEpochSecond());
         entry.put(DeviceContract.DeviceEntry.END_TIME, Instant.now().getEpochSecond());
         entry.put(DeviceContract.DeviceEntry.AVERAGE_RSSI, rssiSum / deviceDetected.rssis.size());
