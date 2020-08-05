@@ -187,20 +187,20 @@ public class SelfCheckFragment extends Fragment {
 
 
             titleText.setText("Do you have any of these symptoms?\n\n");
-            bodyText.setText("\u2022 Tough time breathing \n" +
-                            "\u2022 Chest pain\n" +
-                            "\u2022 Confusion\n" +
-                            "\u2022 Losing consciousness");
+            bodyText.setText("\u25CF Tough time breathing \n" +
+                            "\u25CF Chest pain\n" +
+                            "\u25CF Confusion\n" +
+                            "\u25CF Losing consciousness");
             continueButton.setText("Continue");
         } else if (SelfCheckFragment.stage == 1) {
             titleText.setText("Do you have any of these symptoms? \n ");
 
             bodyText.setText("\u2022 Cough\n" +
-                    "\u2022 Pink eye \n" +
-                    "\u2022 Fever\n" +
-                    "\u2022 Chills \n" +
-                    "\u2022 Shortness of breath \n" +
-                    "\u2022 Sore throat");
+                    "\u25CF Pink eye \n" +
+                    "\u25CF Fever\n" +
+                    "\u25CF Chills \n" +
+                    "\u25CF Shortness of breath \n" +
+                    "\u25CF Sore throat");
             yesNo.clearCheck();
             noRadio.setTextColor(Color.DKGRAY);
             yesRadio.setTextColor(Color.DKGRAY);
@@ -223,9 +223,9 @@ public class SelfCheckFragment extends Fragment {
             ((ViewGroup) yesNo.getParent()).removeView(yesNo);
         } else if(SelfCheckFragment.stage == 3 && SelfCheckFragment.sick ==0){
             titleText.setText("Are you in any of these at-risk groups?");
-            bodyText.setText("\u2022 Getting treatment that compromises (weakens) your immune system\n" +
-                    "\u2022 Having a condition that compromises (weakens) your immune system \n" +
-                    "\u2022 Having a chronic (long-lasting) health condition\n");
+            bodyText.setText("\u25CF Getting treatment that compromises (weakens) your immune system\n" +
+                    "\u25CF Having a condition that compromises (weakens) your immune system \n" +
+                    "\u25CF Having a chronic (long-lasting) health condition\n");
             ((ViewGroup) titleText.getParent()).addView(yesNo);
             ((ViewGroup) titleText.getParent()).removeView(age);
             yesNo.clearCheck();
