@@ -209,6 +209,17 @@ public class SelfCheckFragment extends Fragment {
             titleText.setText("What is your age?");
             bodyText.setText("You may leave this blank. Leaving it blank will affect the accuracy of the test");
             ((ViewGroup) yesNo.getParent()).addView(age);
+            age.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View v, boolean focus) {
+                    if(!focus){
+                        selfCheckInfo.setAge(Integer.parseInt(age.getText().toString()));
+                        if(Integer.parseInt(age.getText().toString()) > 65){
+                            selfCheckInfo.setAtRiskAge(true);
+                        }
+                    }
+                }
+            });
             ((ViewGroup) yesNo.getParent()).removeView(yesNo);
         } else if(SelfCheckFragment.stage == 3 && SelfCheckFragment.sick ==0){
             titleText.setText("Are you in any of these at-risk groups?");

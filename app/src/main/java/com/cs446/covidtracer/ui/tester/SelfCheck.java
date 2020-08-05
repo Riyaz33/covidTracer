@@ -5,6 +5,15 @@ public class SelfCheck {
     private boolean hasSevereSymptons; // severe sickness
     private boolean hasCovidSymptoms; // has covid symptoms
     private int age;
+
+    public boolean isAtRiskAge() {
+        return atRiskAge;
+    }
+
+    public void setAtRiskAge(boolean atRiskAge) {
+        this.atRiskAge = atRiskAge;
+    }
+
     private boolean atRiskAge;
     private boolean isInAtRiskGroup;
     private boolean testCompleted;
