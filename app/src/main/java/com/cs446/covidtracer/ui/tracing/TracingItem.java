@@ -11,21 +11,23 @@ import java.util.concurrent.TimeUnit;
 
 public class TracingItem {
     private String mBluetoothId;
-    private int mRssi;
+    private float mRssi;
     private Date mStartTime;
     private Date mEndTime;
+    private float mRiskValue;
 
-    public TracingItem(String bluetoothId, int rssi, long startTime, long endTime) throws ParseException {
+    public TracingItem(String bluetoothId, float rssi, long startTime, long endTime, float riskValue) throws ParseException {
         mBluetoothId = bluetoothId;
         mRssi = rssi;
         mStartTime = new Date(startTime * 1000);
         mEndTime = new Date(endTime * 1000);
+        mRiskValue = riskValue;
     }
 
     private int getDistance() { // in meters
         // txPower can be changed
         int txPower = -50;
-        int diff = (txPower - mRssi) > 0 ? (txPower - mRssi) : 0;
+        float diff = (txPower - mRssi) > 0 ? (txPower - mRssi) : 0;
 
         return (int)Math.pow(10d, ((double)diff) / (10 * 2));
     }
