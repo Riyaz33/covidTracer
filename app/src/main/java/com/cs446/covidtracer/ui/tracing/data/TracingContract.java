@@ -8,7 +8,7 @@ public final class TracingContract {
 
     public static final class TracingEntry implements BaseColumns {
         // Name of database table that will store bluetooth device contacts.
-        public final static String TABLE_NAME = "devices";
+        public final static String TABLE_NAME = "tracing";
 
         public final static String _ID = BaseColumns._ID;
 
