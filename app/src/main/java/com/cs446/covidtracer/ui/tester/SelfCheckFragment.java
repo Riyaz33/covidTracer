@@ -195,7 +195,7 @@ public class SelfCheckFragment extends Fragment {
         } else if (SelfCheckFragment.stage == 1) {
             titleText.setText("Do you have any of these symptoms? \n ");
 
-            bodyText.setText("\u2022 Cough\n" +
+            bodyText.setText("\u25CF Cough\n" +
                     "\u25CF Pink eye \n" +
                     "\u25CF Fever\n" +
                     "\u25CF Chills \n" +

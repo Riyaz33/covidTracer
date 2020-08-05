@@ -36,7 +36,17 @@
     <string name="search_hint">Search Province</string>
     <string name="learn_more"><a href="https://www.canada.ca/en/public-health/services/diseases/2019-novel-coronavirus-infection/prevention-risks.html/">Learn More About Prevention and Risks</a></string>
     <string name="assessmentLink"><a href="https://covid-19.ontario.ca/assessment-centre-locations/">Find an assessment centre</a></string>
-    <string name="information">Information</string>
+    <string name="whoAdvice"><a href="https://www.who.int/emergencies/diseases/novel-coronavirus-2019/advice-for-public">WHO: General advice for the Public</a></string>
+    <string name="whoMasks"><a href="https://www.who.int/emergencies/diseases/novel-coronavirus-2019/advice-for-public/when-and-how-to-use-masks">WHO: Advice on masks</a></string>
+    <string name="whoFacts"><a href="https://www.who.int/emergencies/diseases/novel-coronavirus-2019/advice-for-public/myth-busters">WHO: COVID-19 fact checking</a></string>
+    <string name="whoTravel"><a href="https://www.who.int/travel-advice">WHO: Advice on travel</a></string>
+    <string name="whoDashboard"><a href="https://covid19.who.int">WHO: COVID-19 case numbers dashboard</a></string>
+    <string name="whoHome"><a href="https://www.who.int/emergencies/diseases/novel-coronavirus-2019">WHO: COVID-19 homepage</a></string>
+    <string name="ontarioAssessment"><a href="https://covid-19.ontario.ca/covid-19-assessment-centres">Ontario COVID-19 assessment centers</a></string>
+    <string name="cdcHome"><a href="https://www.cdc.gov/coronavirus/2019-ncov/index.html">CDC: COVID-19 homepage</a></string>
+    <string name="whoFAQ"><a href="https://www.who.int/emergencies/diseases/novel-coronavirus-2019/question-and-answers-hub">WHO: FAQ</a></string>
+    <string name="whoFund"><a href="https://www.who.int/emergencies/diseases/novel-coronavirus-2019/advice-for-public">WHO: COVID-19 Response Fund</a></string>
+    <string name="information">Resources</string>
     <string name="add_widget">Add widget</string>
     <string-array name="covid_status_update_choices">
         <item>Negative</item>
