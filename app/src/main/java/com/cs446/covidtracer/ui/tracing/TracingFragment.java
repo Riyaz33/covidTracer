@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.ContentView;
 import androidx.annotation.NonNull;
@@ -60,7 +61,12 @@ public class TracingFragment extends Fragment {
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
         // end
-
+        if (tracingItems.size() == 0) {
+            final View routeListingsView = inflater.inflate(R.layout.fragment_tracing, null);
+            TextView mNoRisk = (TextView) routeListingsView.findViewById(R.id.empty_risk);
+            mNoRisk.setText("No Risks found.");
+            return routeListingsView;
+        }
         return root;
     }
 }

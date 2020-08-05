@@ -27,6 +27,7 @@
     <string name="show_details">Show Details</string>
     <string name="no_internet_connection">No internet connection.</string>
     <string name="no_summaries">No summaries found.</string>
+    <style name="no_risk">No Risks found.</style>
     <string name="tests">Tests</string>
     <string name="total">Total</string>
     <string name="active">Active</string>

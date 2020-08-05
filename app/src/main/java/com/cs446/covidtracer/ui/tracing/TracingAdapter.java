@@ -25,12 +25,14 @@ public class TracingAdapter extends RecyclerView.Adapter<TracingViewHolder>{
         public TextView mDateFactorView;
         public TextView mDurationFactorView;
         public CardView mTracingCard;
+        public TextView mNoRiskView;
         public TracingViewHolder(@NonNull View itemView) {
             super(itemView);
             mRiskFactorView = itemView.findViewById(R.id.riskFactor);
             mDateFactorView = itemView.findViewById(R.id.dateFactor);
             mDurationFactorView = itemView.findViewById(R.id.durationFactor);
             mTracingCard = itemView.findViewById((R.id.tracingCard));
+            mNoRiskView = itemView.findViewById(R.id.empty_risk);
         }
     }
 
