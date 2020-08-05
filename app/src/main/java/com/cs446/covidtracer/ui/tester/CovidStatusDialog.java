@@ -53,7 +53,8 @@ public class CovidStatusDialog extends DialogFragment {
             checked = 1;
         }
 
-        final String[] statusList = getActivity().getResources().getStringArray(R.array.covid_status_update_choices);
+        final String[] statusList = getActivity().getResources()
+                .getStringArray(R.array.covid_status_update_choices);
         builder.setTitle(R.string.covid_status_dialog_title)
                 .setSingleChoiceItems(R.array.covid_status_update_choices, checked, new DialogInterface.OnClickListener() {
                     @Override
@@ -66,13 +67,16 @@ public class CovidStatusDialog extends DialogFragment {
                     public void onClick(DialogInterface dialog, int which) {
                         editor.putString(getString(R.string.covid_status_shared_pref), statusList[position]);
                         editor.commit();
+                        // Code to update COVID-19 Status on the database <- Begin
                         Map<String,Object> data = new HashMap<>();
                         long epochTime = System.currentTimeMillis();
                         String time = ""+epochTime;
                         data.put("userStatus",statusList[position]);
                         data.put("timestamp",time);
-                        DocumentReference doc = db.collection("Users").document( macAddr);
+                        DocumentReference doc = db.collection("Users")
+                                .document( macAddr);
                         doc.update(data);
+                        // Code to update COVID-19 Status on the database <- End
                         Intent intent = getActivity().getIntent();
                         intent.putExtra("key", true);
                         getTargetFragment().onActivityResult(getTargetRequestCode(), 101, intent);

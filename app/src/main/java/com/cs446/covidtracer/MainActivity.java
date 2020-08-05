@@ -45,21 +45,30 @@ import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String TAG = "Firebase";
-    private FirebaseFirestore db;
-    private DatabaseReference doc;
-    SharedPreferences sharedPreferences;
+    // Migrate to strings.xml and update values <- TODO
+    private String DEFAULT_COVID_STATUS = "Negative";
+    private String ID = "userID";
+    private String DEFAULT = "Users";
+    private String STATUS = "userStatus";
+    private String TIMESTAMP = "timestamp";
+    private String NEW_USER = "negative";
     public static final String bluetoothID = "BluetoothID";
     public static final String regPref = "RegistrationPref";
     public static final String regStat = "RegistrationStatus";
-    public static final String secretKey = "[B@387c703b";
-    private Query mQuery;
-    private int DEFAULT_COVID_STATUS = 0;
-    private String ID = "userID";
-    private String STATUS = "userStatus";
-    private boolean isRegistered = false;
-    private BluetoothManager mBluetoothManager;
-    private BluetoothAdapter mBluetoothAdapter;
+    public static final String DISPLAY_ADDRESS = "Your bluetooth address is: ";
+    public static final String CONSENT = " \nThis address will be encrypted and stored " +
+            "on our servers and will be associated to your Covid-19 Test Results. " +
+            "Click Continue to provide your consent and proceed. ";
+    private static final String TAG = "Firebase Firestore:";
+
+    Boolean changed = false;
+    private FirebaseFirestore db;
+    private DatabaseReference doc;
+    SharedPreferences sharedPreferences;
+
+    // Set up Encryption <- TODO
+    public static final String secretKey = "";
+
     private SharedPreferences.Editor editor;
 
 
@@ -71,30 +80,42 @@ public class MainActivity extends AppCompatActivity {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.navigation_updates, R.id.navigation_tracing, R.id.navigation_tester, R.id.navigation_information)
+                R.id.navigation_updates, R.id.navigation_tracing,
+                R.id.navigation_tester, R.id.navigation_information)
                 .build();
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
+        NavController navController = Navigation.findNavController(this,
+                R.id.nav_host_fragment);
+        NavigationUI.setupActionBarWithNavController(this, navController,
+                appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
 
+        /*
+        No bluetooth so don't need this :(
+
         if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
+
             // We need to enforce that location permissions are enabled.
             ActivityCompat.requestPermissions(MainActivity.this,
                     new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
                     1);
         }
-        db = FirebaseFirestore.getInstance();
-        sharedPreferences = getSharedPreferences(regPref,Context.MODE_PRIVATE);
-        editor = sharedPreferences.edit();
-        Boolean changed = false;
-        final String macAddr = getRandomMacAddress();
-        if ("negative" == sharedPreferences.getString(regStat, "negative")) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("Registration");
-            builder.setMessage("Your bluetooth address is:"+macAddr+" \n Click OK to proceed with registration");
+        */
 
-            // add a button
-            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+        // Get Firestore Started
+        db = FirebaseFirestore.getInstance();
+
+        // generate dummy mac address to work around bluetooth dev restrictions
+        final String macAddr = getRandomMacAddress();
+
+        // Check Registration Status using shared preferences, create new if necessary <- Begin
+        sharedPreferences = getSharedPreferences(regPref, Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+        if (NEW_USER == sharedPreferences.getString(regStat, NEW_USER)) {
+            // new user -> Show Registration Alert Dialog
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Welcome to Covid-Tracer");
+            builder.setMessage(DISPLAY_ADDRESS + macAddr + CONSENT);
+            builder.setPositiveButton("Continue", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     sendRegistrationToServer(macAddr);
@@ -106,15 +127,17 @@ public class MainActivity extends AppCompatActivity {
             dialog.show();
             changed = true;
         }
-        if (changed)
-        {
+        // successful in adding new user, save to shared preferences
+        if (changed) {
             editor.putString(bluetoothID, macAddr);
             editor.putString(regStat, "positive");
             editor.commit();
         }
-        // Get new positive users
-        db.collection("Users")
-                .whereEqualTo("userStatus", "Positive")
+
+        // Check Registration Status using shared preferences, create new if necessary <- End
+
+        // Add Listener to get new Positive users in real time <- Begin
+        db.collection(DEFAULT).whereEqualTo(STATUS, "Positive")
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot value,
@@ -123,66 +146,74 @@ public class MainActivity extends AppCompatActivity {
                             Log.w(TAG, "Listen failed.", e);
                             return;
                         }
-                      final PositiveDbHelper positiveDb = new PositiveDbHelper(getApplicationContext());
-                      ArrayList<Pair<String,Long>> list = new ArrayList<Pair<String,Long>>();
-                      List<Object> Users = new ArrayList<>();
+                        // SQLite Helper Class for storing new Positive users locally
+                        final PositiveDbHelper positiveDb =
+                                new PositiveDbHelper(getApplicationContext());
+                        ArrayList<Pair<String, Long>> list = new ArrayList<Pair<String, Long>>();
                         for (QueryDocumentSnapshot doc : value) {
-                            if (doc.get("userID") != null) {
-                               String id = doc.getString("userID");
-                               String timestamp = doc.getString("timestamp");
-                                Long timestamp1 = Long.parseLong("0");
-                               if (timestamp != null) {
-                                  timestamp1 = Long.parseLong(timestamp);
-                               }
-                                Pair<String, Long> User = new Pair<String, Long>(id, timestamp1);
-                               list.add(User);
+                            if (doc.get(ID) != null && doc.get(ID) != macAddr) {
+                                String id = doc.getString(ID);
+                                String timestamp = doc.getString(TIMESTAMP);
+                                Long time = Long.parseLong("0");
+                                if (timestamp != null) {
+                                    time = Long.parseLong(timestamp);
+                                }
+                                Pair<String, Long> User = new Pair<String, Long>(id, time);
+                                list.add(User);
                             }
                         }
+                        // Add to local db
                         positiveDb.addDevice(list);
-                        //Log.d(TAG, "Current Users that have tested positive: ");
+                        Log.d(TAG, list.size() + " new users with Positive Status");
                     }
                 });
 
-
+        // Add Listener to get new Positive users in real time <- End
 
 
     }
 
+    // Method to send registration to Firebase database
     private void sendRegistrationToServer(String macAddress) {
-
         Map<String, Object> data = new HashMap<>();
         data.put(STATUS, DEFAULT_COVID_STATUS);
         data.put(ID, macAddress);
-        db.collection("Users").document(macAddress).set(data).addOnSuccessListener(new OnSuccessListener<Void>() {
+        db.collection(DEFAULT).document(macAddress).set(data)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                Toast.makeText(MainActivity.this, "Registration Completed", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this,
+                        " Registration Successful! ", Toast.LENGTH_SHORT).show();
             }
         })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(MainActivity.this, "Failed",Toast.LENGTH_LONG).show();
-                        Log.d("ID-REGISTRATION-FAILURE",e.getMessage());
+                        Toast.makeText(MainActivity.this,
+                                " Registration Failed! ", Toast.LENGTH_LONG).show();
+                        Log.d("ID-REGISTRATION-FAILURE", e.getMessage());
                     }
                 });
     }
 
+    // Function to generate Random MAC Address
     public static String getRandomMacAddress() {
         String mac = "";
         Random r = new Random();
         for (int i = 0; i < 6; i++) {
             int n = r.nextInt(255);
             mac += String.format("%02x:", n);
-
         }
         mac = mac.substring(0, mac.length() - 1);
         return mac.toUpperCase();
     }
+}
 
-
+/*
+    Not needed, Bluetooth Stuff
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[]
+    permissions, @NonNull int[] grantResults) {
         if (requestCode == 1) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 Intent bluetoothClient = new Intent(this, ClientService.class);
@@ -191,9 +222,11 @@ public class MainActivity extends AppCompatActivity {
                 Intent bluetoothPeripheral = new Intent(this, PeripheralService.class);
                 startForegroundService(bluetoothPeripheral);
             } else {
-                Toast.makeText(MainActivity.this, "Contact tracing disabled. Location permissions must be granted to start contact tracing.", Toast.LENGTH_LONG).show();
+                Toast.makeText(MainActivity.this, "Contact tracing disabled. Location permissions
+                must be granted to start contact tracing.", Toast.LENGTH_LONG).show();
             }
         }
     }
 }
 
+*/
