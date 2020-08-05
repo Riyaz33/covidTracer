@@ -12,12 +12,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="24dp"
+        android:drawableLeft="@drawable/ic_home_black_24dp"
         android:text="@string/return_home"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        android:drawableLeft="@drawable/ic_home_black_24dp"/>
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/disclaimer"
@@ -90,5 +90,18 @@
         app:layout_constraintHorizontal_bias="0.514"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/disclaimer" />
+
+    <TextView
+        android:id="@+id/assessmentLink"
+        android:layout_width="409dp"
+        android:layout_height="wrap_content"
+        android:text="@string/assessmentLink"
+        android:textAlignment="center"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/bodyText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/bodyText"
+        app:layout_constraintVertical_bias="0.399" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

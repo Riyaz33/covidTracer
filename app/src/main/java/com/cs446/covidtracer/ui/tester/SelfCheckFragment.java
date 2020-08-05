@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,6 +33,7 @@ public class SelfCheckFragment extends Fragment {
     private RadioGroup yesNo;
     private EditText age;
     private static int sick;
+    private TextView assessmentLink;
 
     @Nullable
     @Override
@@ -112,6 +114,9 @@ public class SelfCheckFragment extends Fragment {
         age = (EditText) root.findViewById(R.id.age);
         ((ViewGroup) age.getParent()).removeView(age);
 
+        assessmentLink = (TextView) root.findViewById(R.id.assessmentLink);
+        assessmentLink.setMovementMethod(LinkMovementMethod.getInstance());
+        ((ViewGroup) assessmentLink.getParent()).removeView(assessmentLink);
 
         return  root;
     }
@@ -156,7 +161,11 @@ public class SelfCheckFragment extends Fragment {
 
             titleText.setText("You are showing some symptoms of COVID-19.");
             bodyText.setText("\nWe recommend you to get an official COVID-19 Test.\n\n" +
-                    "Click here to find out how you can get tested");
+                    "Click the link below to find an assessment center.");
+            ((ViewGroup) yesNo.getParent()).addView(assessmentLink);
+
+
+
 
             ((ViewGroup) yesNo.getParent()).removeView(yesNo);
             ((ViewGroup) continueButton.getParent()).removeView(continueButton);
