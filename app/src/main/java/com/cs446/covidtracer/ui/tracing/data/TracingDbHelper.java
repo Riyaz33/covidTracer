@@ -85,7 +85,7 @@ public class TracingDbHelper extends SQLiteOpenHelper {
 
     public boolean alreadyExists(TracingItem item){
         SQLiteDatabase db = this.getWritableDatabase();
-        String query = MessageFormat.format("SELECT * FROM {0} WHERE {1} = \"{2}\" AND {3} = {4}", TracingEntry.TABLE_NAME,TracingEntry.DEVICE_ADDRESS, item.getBluetoothId(), TracingEntry.START_TIME, item.getStartTime());
+        String query = MessageFormat.format("SELECT * FROM {0} WHERE {1} = \"{2}\" AND {3} = {4}", TracingEntry.TABLE_NAME,TracingEntry.DEVICE_ADDRESS, item.getBluetoothId(), TracingEntry.START_TIME, Long.toString(item.getStartTime() / 1000));
         Cursor cursor = db.rawQuery(query,null);
         while (cursor.moveToNext()){
             return true;
@@ -108,8 +108,8 @@ public class TracingDbHelper extends SQLiteOpenHelper {
                                 TracingEntry.AVERAGE_RSSI,
                                 TracingEntry.RISK_VALUE,
                                 positiveList.get(i).first,
-                                items.get(j).getStartTime(),
-                                items.get(j).getEndTime(),
+                                Long.toString(items.get(j).getStartTime() / 1000),
+                                Long.toString(items.get(j).getEndTime() / 1000),
                                 items.get(j).getRssi(),
                                 items.get(j).getRiskValue());
                         db.execSQL(query);

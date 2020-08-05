@@ -52,7 +52,6 @@ public class BluetoothDbHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         String query = MessageFormat.format("SELECT * FROM {0} WHERE {1} = \"{2}\"", DeviceEntry.TABLE_NAME, DeviceEntry.DEVICE_ADDRESS, bluetoothID);
         Cursor cursor = db.rawQuery(query,null);
-        cursor.moveToFirst();
         ArrayList<TracingItem> tracingList = new ArrayList<>();
         while (cursor.moveToNext()) {
             try {
