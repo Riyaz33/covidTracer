@@ -52,8 +52,8 @@ public class TesterFragment extends Fragment {
             }
 
         });
-        TextView linkTextView = root.findViewById(R.id.rec_links);
-        linkTextView.setMovementMethod(LinkMovementMethod.getInstance());
+        //TextView linkTextView = root.findViewById(R.id.rec_links);
+        //linkTextView.setMovementMethod(LinkMovementMethod.getInstance());
 
         selfTestStartButton = (Button) root.findViewById(R.id.selfTestStartButton);
         selfTestStartButton.setOnClickListener(new View.OnClickListener(){
