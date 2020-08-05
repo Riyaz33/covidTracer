@@ -11,6 +11,7 @@
             android:layout_height="wrap_content"
             android:text="Moderate"
             android:textColor="@android:color/white"
+            android:layout_marginStart="4dp"
             android:textSize="30sp"
             android:textStyle="bold" />
 
@@ -20,6 +21,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/riskFactor"
             android:text="Risk"
+            android:layout_marginStart="4dp"
             android:textColor="@android:color/white"
             android:textSize="30sp"
             android:textStyle="bold" />
@@ -33,19 +35,6 @@
             android:layout_marginTop="1dp"
             android:layout_alignParentRight="true"
             android:text="Date"
-            android:textColor="@android:color/white"
-            android:textSize="20sp" />
-
-        <TextView
-            android:id="@+id/durationFactor"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_marginStart="0dp"
-            android:layout_marginTop="29dp"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentBottom="true"
-            android:text="Time"
             android:textColor="@android:color/white"
             android:textSize="20sp" />
 </RelativeLayout>

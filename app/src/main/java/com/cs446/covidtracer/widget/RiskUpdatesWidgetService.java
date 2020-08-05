@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.cs446.covidtracer.R;
 import com.cs446.covidtracer.ui.tracing.TracingItem;
+import com.cs446.covidtracer.ui.tracing.data.TracingDbHelper;
 
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -34,6 +35,7 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
     private Context mContext;
     private int mAppWidgetId;
     private List<TracingItem> tracingItems = new ArrayList<>();
+    TracingDbHelper db;
 
     public ListRemoteViewsFactory(Context context, Intent intent){
         mContext = context;
@@ -43,18 +45,12 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 
     @Override
     public void onCreate() {
-        try{
-            tracingItems.add(new TracingItem("abcdef", -50, 1596174793, 1596175393, -60)); // High
-            tracingItems.add(new TracingItem("abcdefg", -60, 1596174793, 1596175393, -60)); // High
-            tracingItems.add(new TracingItem("abcdef", -70, 1596174793, 1596175393, -70)); // Moderate
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        db = new TracingDbHelper(mContext);
     }
 
     @Override
     public void onDataSetChanged() {
-
+        tracingItems = db.getAllTracingItems();
     }
 
     @Override
@@ -72,7 +68,6 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
         RemoteViews rv = new RemoteViews(mContext.getPackageName(), R.layout.tracing_list_item_widget);
         rv.setTextViewText(R.id.riskFactor, tracingItems.get(position).getRisk());
         rv.setTextViewText(R.id.dateFactor, tracingItems.get(position).getDaysAgo());
-        rv.setTextViewText(R.id.durationFactor, tracingItems.get(position).getDurationString());
         rv.setInt(R.id.tracingCardWidget, "setBackgroundColor", tracingItems.get(position).getBackgroundColor());
 
 //        Bundle extras = new Bundle();
