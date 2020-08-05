@@ -42,17 +42,13 @@ public class TracingDbHelper extends SQLiteOpenHelper {
 
         // Execute the SQL statement
         db.execSQL(SQL_CREATE_DEVICE_TABLE);
-        String item = MessageFormat.format("INSERT INTO {0}({1}, {2}, {3}, {4}, {5}) VALUES(\"abcdef\", 1596174793, 1596175393, -50, 100)", TracingEntry.TABLE_NAME, TracingEntry.DEVICE_ADDRESS, TracingEntry.START_TIME, TracingEntry.END_TIME, TracingEntry.AVERAGE_RSSI, TracingEntry.RISK_VALUE);
+        String item = MessageFormat.format("INSERT INTO {0}({1}, {2}, {3}, {4}, {5}) VALUES(\"abcdef\", 1596174793, 1596175393, -30, 1)", TracingEntry.TABLE_NAME, TracingEntry.DEVICE_ADDRESS, TracingEntry.START_TIME, TracingEntry.END_TIME, TracingEntry.AVERAGE_RSSI, TracingEntry.RISK_VALUE);
+        db.execSQL(item);
+        item = MessageFormat.format("INSERT INTO {0}({1}, {2}, {3}, {4}, {5}) VALUES(\"abcdef\", 1596174793, 1596175393, -30, 2)", TracingEntry.TABLE_NAME, TracingEntry.DEVICE_ADDRESS, TracingEntry.START_TIME, TracingEntry.END_TIME, TracingEntry.AVERAGE_RSSI, TracingEntry.RISK_VALUE);
+        db.execSQL(item);
+        item = MessageFormat.format("INSERT INTO {0}({1}, {2}, {3}, {4}, {5}) VALUES(\"abcdef\", 1596174793, 1596175393, -50, 2)", TracingEntry.TABLE_NAME, TracingEntry.DEVICE_ADDRESS, TracingEntry.START_TIME, TracingEntry.END_TIME, TracingEntry.AVERAGE_RSSI, TracingEntry.RISK_VALUE);
         db.execSQL(item);
         item = MessageFormat.format("INSERT INTO {0}({1}, {2}, {3}, {4}, {5}) VALUES(\"abcdef\", 1596174793, 1596175393, -50, 3)", TracingEntry.TABLE_NAME, TracingEntry.DEVICE_ADDRESS, TracingEntry.START_TIME, TracingEntry.END_TIME, TracingEntry.AVERAGE_RSSI, TracingEntry.RISK_VALUE);
-        db.execSQL(item);
-        item = MessageFormat.format("INSERT INTO {0}({1}, {2}, {3}, {4}, {5}) VALUES(\"abcdef\", 1596174793, 1596175393, -90, 3)", TracingEntry.TABLE_NAME, TracingEntry.DEVICE_ADDRESS, TracingEntry.START_TIME, TracingEntry.END_TIME, TracingEntry.AVERAGE_RSSI, TracingEntry.RISK_VALUE);
-        db.execSQL(item);
-        item = MessageFormat.format("INSERT INTO {0}({1}, {2}, {3}, {4}, {5}) VALUES(\"abcdef\", 1596174793, 1596175393, -100, 3)", TracingEntry.TABLE_NAME, TracingEntry.DEVICE_ADDRESS, TracingEntry.START_TIME, TracingEntry.END_TIME, TracingEntry.AVERAGE_RSSI, TracingEntry.RISK_VALUE);
-        db.execSQL(item);
-        item = MessageFormat.format("INSERT INTO {0}({1}, {2}, {3}, {4}, {5}) VALUES(\"abcdef\", 1596174793, 1596175393, -90, 3)", TracingEntry.TABLE_NAME, TracingEntry.DEVICE_ADDRESS, TracingEntry.START_TIME, TracingEntry.END_TIME, TracingEntry.AVERAGE_RSSI, TracingEntry.RISK_VALUE);
-        db.execSQL(item);
-        item = MessageFormat.format("INSERT INTO {0}({1}, {2}, {3}, {4}, {5}) VALUES(\"abcdef\", 1596174793, 1596175393, -100, 3)", TracingEntry.TABLE_NAME, TracingEntry.DEVICE_ADDRESS, TracingEntry.START_TIME, TracingEntry.END_TIME, TracingEntry.AVERAGE_RSSI, TracingEntry.RISK_VALUE);
         db.execSQL(item);
     }
 
@@ -73,7 +69,6 @@ public class TracingDbHelper extends SQLiteOpenHelper {
                 + " FROM " + TracingEntry.TABLE_NAME
                 + " ORDER BY " + TracingEntry.RISK_VALUE + ", " + TracingEntry.START_TIME;
         Cursor cursor = db.rawQuery(query,null);
-        cursor.moveToFirst();
         while (cursor.moveToNext()){
             try {
                 tracingList.add(new TracingItem(cursor.getString(cursor.getColumnIndex(TracingEntry.DEVICE_ADDRESS)),
@@ -92,7 +87,6 @@ public class TracingDbHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         String query = MessageFormat.format("SELECT * FROM {0} WHERE {1} = \"{2}\" AND {3} = {4}", TracingEntry.TABLE_NAME,TracingEntry.DEVICE_ADDRESS, item.getBluetoothId(), TracingEntry.START_TIME, item.getStartTime());
         Cursor cursor = db.rawQuery(query,null);
-        cursor.moveToFirst();
         while (cursor.moveToNext()){
             return true;
         }
