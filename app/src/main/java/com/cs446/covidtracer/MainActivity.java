@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.cs446.covidtracer.bluetooth.ClientService;
 import com.cs446.covidtracer.bluetooth.PeripheralService;
 import com.cs446.covidtracer.ui.tracing.data.PositiveDbHelper;
+import com.cs446.covidtracer.ui.tracing.data.TracingDbHelper;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -145,6 +146,7 @@ public class MainActivity extends AppCompatActivity {
                         // SQLite Helper Class for storing new Positive users locally
                         final PositiveDbHelper positiveDb =
                                 new PositiveDbHelper(getApplicationContext());
+                        final TracingDbHelper tracingDb = new TracingDbHelper(getApplicationContext());
                         ArrayList<Pair<String, Long>> list = new ArrayList<Pair<String, Long>>();
                         for (QueryDocumentSnapshot doc : value) {
                             if (doc.get(ID) != null && doc.get(ID) != macAddr) {
@@ -160,6 +162,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                         // Add to local db
                         positiveDb.addDevice(list);
+                        tracingDb.checkAndAddTracingItems(list, getApplicationContext());
                         Log.d(TAG, list.size() + " new users with Positive Status");
                     }
                 });
