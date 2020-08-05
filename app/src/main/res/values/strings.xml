@@ -57,4 +57,5 @@
     <string name="duration">Duration:</string>
     <string name="colour_marking">Note: our app is built with privacy and transparency in mind. Thus, we have the following colour coding process:
         information stored on your device is marked in green, anonymous information stored on server is marked in orange. We do not store personally identifiable information on the server.</string>
+    <string name="contact_privacy">Contacted users are stored only on your device.</string>
 </resources>
