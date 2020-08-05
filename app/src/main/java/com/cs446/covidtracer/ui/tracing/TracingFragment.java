@@ -13,7 +13,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.cs446.covidtracer.R;
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.TimeZone;
 
 public class TracingFragment extends Fragment {
     private RecyclerView mRecyclerView;
@@ -27,24 +30,24 @@ public class TracingFragment extends Fragment {
         // start item list
         ArrayList<TracingItem> tracingItems = new ArrayList<>();
         try {
-            tracingItems.add(new TracingItem("abcdef", -50, "20-07-2020 08:00:00 PM", "20-07-2020 08:10:00 PM")); // High
-            tracingItems.add(new TracingItem("abcdefg", -60, "20-07-2020 08:00:00 PM", "20-07-2020 08:10:00 PM")); // High
-            tracingItems.add(new TracingItem("abcdef", -70, "20-07-2020 08:00:00 PM", "20-07-2020 08:10:00 PM")); // Moderate
-            tracingItems.add(new TracingItem("abcdefg", -80, "20-07-2020 08:00:00 PM", "20-07-2020 08:10:00 PM")); // Moderate
-            tracingItems.add(new TracingItem("abcdef", -90, "20-07-2020 08:00:00 PM", "20-07-2020 08:10:00 PM")); // Low
-            tracingItems.add(new TracingItem("abcdefg", -100, "20-07-2020 08:00:00 PM", "20-07-2020 08:10:00 PM")); // Low
-            tracingItems.add(new TracingItem("abcdef", -50, "20-07-2020 08:00:00 PM", "20-07-2020 08:05:00 PM")); // High
-            tracingItems.add(new TracingItem("abcdefg", -60, "20-07-2020 08:00:00 PM", "20-07-2020 08:05:00 PM")); // Moderate
-            tracingItems.add(new TracingItem("abcdef", -70, "20-07-2020 08:00:00 PM", "20-07-2020 08:05:00 PM")); // Moderate
-            tracingItems.add(new TracingItem("abcdefg", -80, "20-07-2020 08:00:00 PM", "20-07-2020 08:05:00 PM")); // Low
-            tracingItems.add(new TracingItem("abcdef", -90, "20-07-2020 08:00:00 PM", "20-07-2020 08:05:00 PM")); // Low
-            tracingItems.add(new TracingItem("abcdefg", -100, "20-07-2020 08:00:00 PM", "20-07-2020 08:05:00 PM")); // Low
-            tracingItems.add(new TracingItem("abcdef", -50, "20-07-2020 08:00:00 PM", "20-07-2020 08:01:00 PM")); // High
-            tracingItems.add(new TracingItem("abcdefg", -60, "20-07-2020 08:00:00 PM", "20-07-2020 08:01:00 PM")); // Moderate
-            tracingItems.add(new TracingItem("abcdef", -70, "20-07-2020 08:00:00 PM", "20-07-2020 08:01:00 PM")); // low
-            tracingItems.add(new TracingItem("abcdefg", -80, "20-07-2020 08:00:00 PM", "20-07-2020 08:01:00 PM")); // low
-            tracingItems.add(new TracingItem("abcdef", -90, "20-07-2020 08:00:00 PM", "20-07-2020 08:01:00 PM")); // low
-            tracingItems.add(new TracingItem("abcdefg", -100, "20-07-2020 08:00:00 PM", "20-07-2020 08:01:00 PM")); // low
+            tracingItems.add(new TracingItem("abcdef", -50, 1596174793, 1596175393)); // High
+            tracingItems.add(new TracingItem("abcdefg", -60, 1596575855, 1596576455)); // High
+            tracingItems.add(new TracingItem("abcdef", -70, 1596575855, 1596576455)); // Moderate
+            tracingItems.add(new TracingItem("abcdefg", -80, 1596575855, 1596576455)); // Moderate
+            tracingItems.add(new TracingItem("abcdef", -90, 1596575855, 1596576455)); // Low
+            tracingItems.add(new TracingItem("abcdefg", -100, 1596575855, 1596576455)); // Low
+            tracingItems.add(new TracingItem("abcdef", -50, 1596575855, 1596576155)); // High
+            tracingItems.add(new TracingItem("abcdefg", -60, 1596575855, 1596576155)); // Moderate
+            tracingItems.add(new TracingItem("abcdef", -70, 1596575855, 1596576155)); // Moderate
+            tracingItems.add(new TracingItem("abcdefg", -80, 1596575855, 1596576155)); // Low
+            tracingItems.add(new TracingItem("abcdef", -90, 1596575855, 1596576155)); // Low
+            tracingItems.add(new TracingItem("abcdefg", -100, 1596575855, 1596576155)); // Low
+            tracingItems.add(new TracingItem("abcdef", -50, 1596575855, 1596575915)); // High
+            tracingItems.add(new TracingItem("abcdefg", -60, 1596575855, 1596575915)); // Moderate
+            tracingItems.add(new TracingItem("abcdef", -70, 1596575855, 1596575915)); // low
+            tracingItems.add(new TracingItem("abcdefg", -80, 1596575855, 1596575915)); // low
+            tracingItems.add(new TracingItem("abcdef", -90, 1596575855, 1596575915)); // low
+            tracingItems.add(new TracingItem("abcdefg", -100, 1596575855, 1596575915)); // low
             mRecyclerView = root.findViewById(R.id.tracingRecyclerView);
             mRecyclerView.setHasFixedSize(true);
             mLayoutManager = new LinearLayoutManager(getActivity());

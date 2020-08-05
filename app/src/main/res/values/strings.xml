@@ -39,4 +39,6 @@
         <item>Positive</item>
     </string-array>
     <string name="widget_header">Tracing Risk Updates</string>
+    <string name="time_elapsed">Time Elapsed:</string>
+    <string name="duration">Duration:</string>
 </resources>

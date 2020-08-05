@@ -3,10 +3,10 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:cardCornerRadius="4dp"
+    app:cardCornerRadius="8dp"
     app:cardBackgroundColor="@android:color/darker_gray"
     android:id="@+id/tracingCard"
-    android:layout_marginTop="4dp">
+    android:layout_marginTop="8dp">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -21,6 +21,7 @@
             android:layout_width="190dp"
             android:layout_height="wrap_content"
             android:text="Moderate"
+            android:layout_marginStart="10dp"
             android:textColor="@android:color/white"
             android:textSize="40sp"
             android:textStyle="bold" />
@@ -32,9 +33,36 @@
             android:layout_below="@+id/riskFactor"
             android:layout_alignParentTop="true"
             android:layout_marginTop="42dp"
+            android:layout_marginStart="10dp"
             android:text="Risk"
             android:textColor="@android:color/white"
             android:textSize="40sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/timeElapsed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="36dp"
+            android:layout_marginTop="1dp"
+            android:layout_toEndOf="@id/riskFactor"
+            android:text="@string/time_elapsed"
+            android:textColor="@android:color/white"
+            android:textSize="10sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/duration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="36dp"
+            android:layout_marginTop="47dp"
+            android:layout_toEndOf="@id/riskFactor"
+            android:text="@string/duration"
+            android:textColor="@android:color/white"
+            android:textSize="10sp"
             android:textStyle="bold" />
 
         <TextView
@@ -42,8 +70,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:layout_marginStart="0dp"
-            android:layout_marginTop="1dp"
+            android:layout_marginStart="36dp"
+            android:layout_marginTop="18dp"
             android:layout_toEndOf="@id/riskFactor"
             android:text="Date"
             android:textColor="@android:color/white"
@@ -54,8 +82,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:layout_marginStart="0dp"
-            android:layout_marginTop="29dp"
+            android:layout_marginStart="36dp"
+            android:layout_marginTop="63dp"
             android:layout_toEndOf="@id/riskFactor"
             android:text="Time"
             android:textColor="@android:color/white"

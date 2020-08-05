@@ -44,9 +44,9 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
     @Override
     public void onCreate() {
         try{
-            tracingItems.add(new TracingItem("abcdef", -50, "20-07-2020 08:00:00 PM", "20-07-2020 08:10:00 PM")); // High
-            tracingItems.add(new TracingItem("abcdefg", -60, "20-07-2020 08:00:00 PM", "20-07-2020 08:10:00 PM")); // High
-            tracingItems.add(new TracingItem("abcdef", -70, "20-07-2020 08:00:00 PM", "20-07-2020 08:10:00 PM")); // Moderate
+            tracingItems.add(new TracingItem("abcdef", -50, 1596174793, 1596175393)); // High
+            tracingItems.add(new TracingItem("abcdefg", -60, 1596174793, 1596175393)); // High
+            tracingItems.add(new TracingItem("abcdef", -70, 1596174793, 1596175393)); // Moderate
         } catch (ParseException e) {
             e.printStackTrace();
         }
