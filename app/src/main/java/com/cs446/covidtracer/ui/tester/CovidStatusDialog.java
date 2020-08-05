@@ -10,24 +10,40 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import com.cs446.covidtracer.R;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import static android.app.AlertDialog.*;
 
 public class CovidStatusDialog extends DialogFragment {
 
     int position = 0;
     SharedPreferences sharedPref;
     SharedPreferences.Editor editor;
+    SharedPreferences sharedPreferences;
+    private FirebaseFirestore db;
+    private String macAddr;
+    public static final String bluetoothID = "BluetoothID";
+    public static final String regPref = "RegistrationPref";
 
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        Builder builder = new Builder(getActivity());
         sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
+        sharedPreferences = getActivity().getSharedPreferences(regPref,Context.MODE_PRIVATE);
         editor = sharedPref.edit();
-
+        macAddr = sharedPreferences.getString(bluetoothID,"");
+        db = FirebaseFirestore.getInstance();
         String[] statusArray = getResources().getStringArray(R.array.covid_status_update_choices);
         String defaultValue = statusArray[0];
         String statusValue = sharedPref.getString(getString(R.string.covid_status_shared_pref), defaultValue);
@@ -49,6 +65,10 @@ public class CovidStatusDialog extends DialogFragment {
                     public void onClick(DialogInterface dialog, int which) {
                         editor.putString(getString(R.string.covid_status_shared_pref), statusList[position]);
                         editor.commit();
+                        Map<String,Object> data = new HashMap<>();
+                        data.put("userStatus",statusList[position]);
+                        DocumentReference doc = db.collection("Users").document( macAddr);
+                        doc.update(data);
                         Intent intent = getActivity().getIntent();
                         intent.putExtra("key", true);
                         getTargetFragment().onActivityResult(getTargetRequestCode(), 101, intent);
@@ -57,6 +77,7 @@ public class CovidStatusDialog extends DialogFragment {
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+
 
                     }
                 });

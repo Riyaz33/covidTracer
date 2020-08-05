@@ -13,6 +13,8 @@
     <string name="covid_status_update_button_title">Update Status</string>
     <string name="covid_status_dialog_title">Update Your COVID-19 Status</string>
     <string name="covid_status_shared_pref">covid_status</string>
+    <string name="bluetooth_id_shared_pref">bluetoothID</string>
+    <string name="is_user_registered_shared_pref">isRegistered</string>
     <string name="high_risk">High Risk</string>
     <string name="moderate_risk">Medium Risk</string>
     <string name="low_risk">Low Risk</string>

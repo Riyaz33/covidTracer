@@ -32,6 +32,7 @@ public class BluetoothDbHelper extends SQLiteOpenHelper {
                 + DeviceEntry.END_TIME + " INTEGER NOT NULL, "
                 + DeviceEntry.AVERAGE_RSSI + " REAL NOT NULL);";
 
+
         // Execute the SQL statement
         db.execSQL(SQL_CREATE_DEVICE_TABLE);
     }
