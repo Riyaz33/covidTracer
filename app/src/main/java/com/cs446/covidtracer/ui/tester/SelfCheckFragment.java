@@ -30,20 +30,25 @@ import com.cs446.covidtracer.R;
 
 import static androidx.core.content.ContextCompat.getSystemService;
 
+/* This is the controller for the self-test module MVC pattern.
+* As you will see below, this manipulates the model by updating model values and
+* manipulates the View by displaying elements / results based on user interaction. */
+
 public class SelfCheckFragment extends Fragment {
 
     public static SelfCheckFragment newInstance() {
         return new SelfCheckFragment();
     }
 
+    // UI Elements for rendering
     private Button quitButton;
     private TextView titleText;
     private TextView bodyText;
     private Button continueButton;
-    private static int stage;
+    private static int stage; // variable to track stage of questionnaire
     private RadioGroup yesNo;
     private EditText age;
-    private static int sick;
+    private static int sick; // tracks whether or not someone should go get a test
     private TextView assessmentLink;
     private Button clipboardCopy;
     private ClipboardManager clipboardManager;
@@ -56,10 +61,13 @@ public class SelfCheckFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
             @Nullable Bundle savedInstanceState) {
 
+        // Initialize Model
         selfCheckInfo = new SelfCheck();
 
+        // Intialize tracking variables
         SelfCheckFragment.stage = 0;
         SelfCheckFragment.sick = 0;
+
         View root = inflater.inflate(R.layout.self_check_fragment, container, false);
 
         quitButton = (Button) root.findViewById(R.id.quitButton);
@@ -95,16 +103,13 @@ public class SelfCheckFragment extends Fragment {
        noRadio = (RadioButton) root.findViewById(R.id.noRadio);
 
 
+       // This part of the code captures the user's responses to the questionnaire and determines the recommendation screen that should be shown
         yesNo.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                System.out.println("stage " + SelfCheckFragment.stage);
-                System.out.println("sick " + SelfCheckFragment.sick);
                 if(checkedId  == R.id.yesRadio){
                     yesRadio.setTextColor(Color.WHITE);
                     noRadio.setTextColor(Color.DKGRAY);
-
-                    Log.d("myapp", "clicked yes");
                     if(SelfCheckFragment.stage == 1){
                         SelfCheckFragment.stage = -1;
                         selfCheckInfo.setHasSevereSymptons(true);
@@ -121,17 +126,12 @@ public class SelfCheckFragment extends Fragment {
                     }
                     else if (SelfCheckFragment.sick == 1 && SelfCheckFragment.stage == 3)
                         SelfCheckFragment.stage = -2;
-                    //else if (SelfCheckFragment.sick == 1 && SelfCheckFragment.stage == 4)
-                      //  SelfCheckFragment.stage = -2;
                     else if(SelfCheckFragment.sick == 0 && SelfCheckFragment.stage == 3){
                         SelfCheckFragment.stage = 3;
                     }
-                    System.out.println("stage after clicked yes " + SelfCheckFragment.stage);
-
                 } else if (checkedId == R.id.noRadio){
                     noRadio.setTextColor(Color.WHITE);
                     yesRadio.setTextColor(Color.DKGRAY);
-                    System.out.println("clicked No");
                     if(SelfCheckFragment.stage == 0){
                         SelfCheckFragment.stage = 1;
                     }
@@ -139,17 +139,17 @@ public class SelfCheckFragment extends Fragment {
                         SelfCheckFragment.sick = 0;
 
                     }
-                    System.out.println("stage after clicked no " + SelfCheckFragment.stage);
-
                 }
 
             }
         });
 
+        // code for copying results to clipboard
         clipboardCopy = (Button) root.findViewById(R.id.clipboardCopy);
         clipboardCopy.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
+                // get results from Model and share it with the View
                 copyToClipboard(selfCheckInfo.selfTestReport());
             }
         });
@@ -168,6 +168,7 @@ public class SelfCheckFragment extends Fragment {
         return  root;
     }
 
+    // copy to clipboard code
     private void copyToClipboard(String copyText){
         if(!copyText.isEmpty()){
             clipboardManager = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
@@ -180,11 +181,11 @@ public class SelfCheckFragment extends Fragment {
         }
     }
 
+    // code that advances the questionnaire as well as shows the recommendation
+    // This is the part where the controller renders the View based on Model values
     private void nextQuestion() {
-        System.out.println("switch stage " + SelfCheckFragment.stage);
         if (SelfCheckFragment.stage == 0) {
             ((ViewGroup) titleText.getParent()).addView(yesNo);
-
 
             titleText.setText("Do you have any of these symptoms?\n\n");
             bodyText.setText("\u25CF Tough time breathing \n" +
@@ -209,6 +210,7 @@ public class SelfCheckFragment extends Fragment {
             titleText.setText("What is your age?");
             bodyText.setText("You may leave this blank. Leaving it blank will affect the accuracy of the test");
             ((ViewGroup) yesNo.getParent()).addView(age);
+            // collect age
             age.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
                 public void onFocusChange(View v, boolean focus) {
@@ -242,8 +244,6 @@ public class SelfCheckFragment extends Fragment {
             selfCheckInfo.setTestCompleted(true);
 
         } else if (SelfCheckFragment.sick == 1) {
-            //age.setInputType(0);
-
             titleText.setText("You are showing some symptoms of COVID-19.");
             bodyText.setText("\nWe recommend you to get an official COVID-19 Test.\n\n" +
                     "Click the link below to find an assessment center.");
@@ -253,8 +253,6 @@ public class SelfCheckFragment extends Fragment {
             ((ViewGroup) continueButton.getParent()).removeView(continueButton);
             ((ViewGroup) assessmentLink.getParent()).addView(clipboardCopy);
             selfCheckInfo.setTestCompleted(true);
-
-
 
         }  else if(SelfCheckFragment.stage == 4){
             age.setInputType(0);
@@ -269,6 +267,7 @@ public class SelfCheckFragment extends Fragment {
         SelfCheckFragment.stage++;
     }
 
+    // after test is done return home
     private void returnHome() {
         Intent intent = new Intent(getActivity(), MainActivity.class);
         startActivity(intent);
@@ -278,7 +277,5 @@ public class SelfCheckFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
     }
-
-
 
 }

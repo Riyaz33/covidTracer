@@ -1,6 +1,8 @@
 package com.cs446.covidtracer.ui.tester;
 
 // Model for Self Test module
+// This holds the information required for the self-test module
+// This model is updated by the controller (SelfCheckFragment.java) and displayed by the view (self_check_fragment.xml)
 public class SelfCheck {
     private boolean hasSevereSymptons; // severe sickness
     private boolean hasCovidSymptoms; // has covid symptoms
