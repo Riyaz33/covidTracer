@@ -1,5 +1,8 @@
 package com.cs446.covidtracer.ui.tester;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
@@ -15,9 +18,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.cs446.covidtracer.MainActivity;
 import com.cs446.covidtracer.R;
+
+import static androidx.core.content.ContextCompat.getSystemService;
 
 public class SelfCheckFragment extends Fragment {
 
@@ -34,13 +40,15 @@ public class SelfCheckFragment extends Fragment {
     private EditText age;
     private static int sick;
     private TextView assessmentLink;
+    private Button clipboardCopy;
+    private ClipboardManager clipboardManager;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
             @Nullable Bundle savedInstanceState) {
 
-        SelfCheck selfCheckInfo = new SelfCheck();
+        final SelfCheck selfCheckInfo = new SelfCheck();
 
         SelfCheckFragment.stage = 0;
         SelfCheckFragment.sick = 0;
@@ -115,6 +123,16 @@ public class SelfCheckFragment extends Fragment {
             }
         });
 
+        clipboardCopy = (Button) root.findViewById(R.id.clipboardCopy);
+        clipboardCopy.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                copyToClipboard(selfCheckInfo.selfTestReport());
+            }
+        });
+
+        ((ViewGroup) clipboardCopy.getParent()).removeView(clipboardCopy);
+
         ((ViewGroup) yesNo.getParent()).removeView(yesNo);
 
         age = (EditText) root.findViewById(R.id.age);
@@ -125,6 +143,18 @@ public class SelfCheckFragment extends Fragment {
         ((ViewGroup) assessmentLink.getParent()).removeView(assessmentLink);
 
         return  root;
+    }
+
+    private void copyToClipboard(String copyText){
+        if(!copyText.isEmpty()){
+            clipboardManager = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
+
+            ClipData clipData = ClipData.newPlainText("key", copyText);
+            clipboardManager.setPrimaryClip(clipData);
+            Toast.makeText(getContext(), "Copied results to clipboard", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(getContext(), "Error: Please try again", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void nextQuestion() {
@@ -170,6 +200,7 @@ public class SelfCheckFragment extends Fragment {
             ((ViewGroup) yesNo.getParent()).removeView(yesNo);
             ((ViewGroup) continueButton.getParent()).removeView(continueButton);
             ((ViewGroup) quitButton.getParent()).removeView(bodyText);
+            ((ViewGroup) titleText.getParent()).addView(clipboardCopy);
         } else if (SelfCheckFragment.sick == 1) {
             //age.setInputType(0);
 
@@ -180,6 +211,8 @@ public class SelfCheckFragment extends Fragment {
 
             ((ViewGroup) yesNo.getParent()).removeView(yesNo);
             ((ViewGroup) continueButton.getParent()).removeView(continueButton);
+            ((ViewGroup) assessmentLink.getParent()).addView(clipboardCopy);
+
 
 
         }  else if(SelfCheckFragment.stage == 4){
@@ -188,6 +221,7 @@ public class SelfCheckFragment extends Fragment {
             bodyText.setText("Stay healthy by practicing social distancing, wearing a mask, and washing your hands frequently.");
             ((ViewGroup) continueButton.getParent()).removeView(continueButton);
             ((ViewGroup) titleText.getParent()).removeView(yesNo);
+            ((ViewGroup) titleText.getParent()).addView(clipboardCopy);
 
         }
         SelfCheckFragment.stage++;
