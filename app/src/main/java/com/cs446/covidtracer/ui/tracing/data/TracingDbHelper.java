@@ -42,11 +42,7 @@ public class TracingDbHelper extends SQLiteOpenHelper {
 
         // Execute the SQL statement
         db.execSQL(SQL_CREATE_DEVICE_TABLE);
-        String item = MessageFormat.format("INSERT INTO {0}({1}, {2}, {3}, {4}, {5}) VALUES(\"abcdef\", 1596174793, 1596175393, -50, 1)", TracingEntry.TABLE_NAME, TracingEntry.DEVICE_ADDRESS, TracingEntry.START_TIME, TracingEntry.END_TIME, TracingEntry.AVERAGE_RSSI, TracingEntry.RISK_VALUE);
-        db.execSQL(item);
-        item = MessageFormat.format("INSERT INTO {0}({1}, {2}, {3}, {4}, {5}) VALUES(\"abcdef\", 1596174793, 1596175393, -90, 2)", TracingEntry.TABLE_NAME, TracingEntry.DEVICE_ADDRESS, TracingEntry.START_TIME, TracingEntry.END_TIME, TracingEntry.AVERAGE_RSSI, TracingEntry.RISK_VALUE);
-        db.execSQL(item);
-        item = MessageFormat.format("INSERT INTO {0}({1}, {2}, {3}, {4}, {5}) VALUES(\"abcdef\", 1596174793, 1596175393, -100, 3)", TracingEntry.TABLE_NAME, TracingEntry.DEVICE_ADDRESS, TracingEntry.START_TIME, TracingEntry.END_TIME, TracingEntry.AVERAGE_RSSI, TracingEntry.RISK_VALUE);
+        String item = MessageFormat.format("INSERT INTO {0}({1}, {2}, {3}, {4}, {5}) VALUES(\"abcdef\", 1596174793, 1596175393, -50, 100)", TracingEntry.TABLE_NAME, TracingEntry.DEVICE_ADDRESS, TracingEntry.START_TIME, TracingEntry.END_TIME, TracingEntry.AVERAGE_RSSI, TracingEntry.RISK_VALUE);
         db.execSQL(item);
         item = MessageFormat.format("INSERT INTO {0}({1}, {2}, {3}, {4}, {5}) VALUES(\"abcdef\", 1596174793, 1596175393, -50, 3)", TracingEntry.TABLE_NAME, TracingEntry.DEVICE_ADDRESS, TracingEntry.START_TIME, TracingEntry.END_TIME, TracingEntry.AVERAGE_RSSI, TracingEntry.RISK_VALUE);
         db.execSQL(item);
