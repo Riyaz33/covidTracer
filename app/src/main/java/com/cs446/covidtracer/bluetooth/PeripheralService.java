@@ -7,13 +7,10 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothGatt;
-import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattServer;
 import android.bluetooth.BluetoothGattServerCallback;
 import android.bluetooth.BluetoothGattService;
 import android.bluetooth.BluetoothManager;
-import android.bluetooth.BluetoothProfile;
 import android.bluetooth.le.AdvertiseCallback;
 import android.bluetooth.le.AdvertiseData;
 import android.bluetooth.le.AdvertiseSettings;
@@ -21,7 +18,6 @@ import android.bluetooth.le.BluetoothLeAdvertiser;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.os.Handler;
 import android.os.IBinder;
 import android.os.ParcelUuid;
 import android.util.Log;
@@ -109,15 +105,6 @@ public class PeripheralService extends Service {
             return;
         }
 
-        /*
-         * Check for advertising support. Not all devices are enabled to advertise
-         * Bluetooth LE data.
-         */
-//        if (!mBluetoothAdapter.isMultipleAdvertisementSupported()) {
-//            Toast.makeText(this, "No Advertising Support.", Toast.LENGTH_SHORT).show();
-//            return;
-//        }
-
         mBluetoothLeAdvertiser = mBluetoothAdapter.getBluetoothLeAdvertiser();
         mGattServer = mBluetoothManager.openGattServer(this, mGattServerCallback);
 
@@ -140,20 +127,6 @@ public class PeripheralService extends Service {
         BluetoothGattService service =new BluetoothGattService(DeviceProfile.SERVICE_UUID,
                 BluetoothGattService.SERVICE_TYPE_PRIMARY);
 
-        BluetoothGattCharacteristic elapsedCharacteristic =
-                new BluetoothGattCharacteristic(DeviceProfile.CHARACTERISTIC_ELAPSED_UUID,
-                        //Read-only characteristic, supports notifications
-                        BluetoothGattCharacteristic.PROPERTY_READ | BluetoothGattCharacteristic.PROPERTY_NOTIFY,
-                        BluetoothGattCharacteristic.PERMISSION_READ);
-        BluetoothGattCharacteristic offsetCharacteristic =
-                new BluetoothGattCharacteristic(DeviceProfile.CHARACTERISTIC_OFFSET_UUID,
-                        //Read+write permissions
-                        BluetoothGattCharacteristic.PROPERTY_READ | BluetoothGattCharacteristic.PROPERTY_WRITE,
-                        BluetoothGattCharacteristic.PERMISSION_READ | BluetoothGattCharacteristic.PERMISSION_WRITE);
-
-        service.addCharacteristic(elapsedCharacteristic);
-        service.addCharacteristic(offsetCharacteristic);
-
         mGattServer.addService(service);
     }
 
@@ -161,110 +134,16 @@ public class PeripheralService extends Service {
      * Terminate the server and any running callbacks
      */
     private void shutdownServer() {
-        mHandler.removeCallbacks(mNotifyRunnable);
-
         if (mGattServer == null) return;
 
         mGattServer.close();
     }
 
-    private Runnable mNotifyRunnable = new Runnable() {
-        @Override
-        public void run() {
-            notifyConnectedDevices();
-            mHandler.postDelayed(this, 2000);
-        }
-    };
-
     /*
      * Callback handles all incoming requests from GATT clients.
      * From connections to read/write requests.
      */
-    private BluetoothGattServerCallback mGattServerCallback = new BluetoothGattServerCallback() {
-        @Override
-        public void onConnectionStateChange(BluetoothDevice device, int status, int newState) {
-            super.onConnectionStateChange(device, status, newState);
-            Log.i(TAG, "onConnectionStateChange "
-                    +DeviceProfile.getStatusDescription(status)+" "
-                    +DeviceProfile.getStateDescription(newState));
-
-            if (newState == BluetoothProfile.STATE_CONNECTED) {
-                postDeviceChange(device, true);
-
-            } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
-                postDeviceChange(device, false);
-            }
-        }
-
-        @Override
-        public void onCharacteristicReadRequest(BluetoothDevice device,
-                                                int requestId,
-                                                int offset,
-                                                BluetoothGattCharacteristic characteristic) {
-            super.onCharacteristicReadRequest(device, requestId, offset, characteristic);
-            Log.i(TAG, "onCharacteristicReadRequest " + characteristic.getUuid().toString());
-
-            if (DeviceProfile.CHARACTERISTIC_ELAPSED_UUID.equals(characteristic.getUuid())) {
-                mGattServer.sendResponse(device,
-                        requestId,
-                        BluetoothGatt.GATT_SUCCESS,
-                        0,
-                        getStoredValue());
-            }
-
-            if (DeviceProfile.CHARACTERISTIC_OFFSET_UUID.equals(characteristic.getUuid())) {
-                mGattServer.sendResponse(device,
-                        requestId,
-                        BluetoothGatt.GATT_SUCCESS,
-                        0,
-                        DeviceProfile.bytesFromInt(mTimeOffset));
-            }
-
-            /*
-             * Unless the characteristic supports WRITE_NO_RESPONSE,
-             * always send a response back for any request.
-             */
-            mGattServer.sendResponse(device,
-                    requestId,
-                    BluetoothGatt.GATT_FAILURE,
-                    0,
-                    null);
-        }
-
-        @Override
-        public void onCharacteristicWriteRequest(BluetoothDevice device,
-                                                 int requestId,
-                                                 BluetoothGattCharacteristic characteristic,
-                                                 boolean preparedWrite,
-                                                 boolean responseNeeded,
-                                                 int offset,
-                                                 byte[] value) {
-            super.onCharacteristicWriteRequest(device, requestId, characteristic, preparedWrite, responseNeeded, offset, value);
-            Log.i(TAG, "onCharacteristicWriteRequest "+characteristic.getUuid().toString());
-
-            if (DeviceProfile.CHARACTERISTIC_OFFSET_UUID.equals(characteristic.getUuid())) {
-                int newOffset = DeviceProfile.unsignedIntFromBytes(value);
-                setStoredValue(newOffset);
-
-                if (responseNeeded) {
-                    mGattServer.sendResponse(device,
-                            requestId,
-                            BluetoothGatt.GATT_SUCCESS,
-                            0,
-                            value);
-                }
-
-                mHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(PeripheralService.this, "Time Offset Updated", Toast.LENGTH_SHORT).show();
-                    }
-                });
-
-                notifyConnectedDevices();
-            }
-        }
-    };
+    private BluetoothGattServerCallback mGattServerCallback = new BluetoothGattServerCallback() {  };
 
     /*
      * Initialize the advertiser
@@ -304,70 +183,11 @@ public class PeripheralService extends Service {
         @Override
         public void onStartSuccess(AdvertiseSettings settingsInEffect) {
             Log.i(TAG, "Peripheral Advertise Started.");
-            postStatusMessage("GATT Server Ready");
         }
 
         @Override
         public void onStartFailure(int errorCode) {
             Log.w(TAG, "Peripheral Advertise Failed: "+errorCode);
-            postStatusMessage("GATT Server Error "+errorCode);
         }
     };
-
-    private Handler mHandler = new Handler();
-    private void postStatusMessage(final String message) {
-        mHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                Log.i(TAG, message);
-            }
-        });
-    }
-
-    private void postDeviceChange(final BluetoothDevice device, final boolean toAdd) {
-        mHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                //This will add the item to our list and update the adapter at the same time.
-                if (toAdd) {
-                    mConnectedDevices.add(device);
-                } else {
-                    mConnectedDevices.remove(device);
-                }
-
-                //Trigger our periodic notification once devices are connected
-                mHandler.removeCallbacks(mNotifyRunnable);
-                if (!mConnectedDevices.isEmpty()) {
-                    mHandler.post(mNotifyRunnable);
-                }
-            }
-        });
-    }
-
-    /* Storage and access to local characteristic data */
-
-    private void notifyConnectedDevices() {
-        for (BluetoothDevice device : mConnectedDevices) {
-            BluetoothGattCharacteristic readCharacteristic = mGattServer.getService(DeviceProfile.SERVICE_UUID)
-                    .getCharacteristic(DeviceProfile.CHARACTERISTIC_ELAPSED_UUID);
-            readCharacteristic.setValue(getStoredValue());
-            mGattServer.notifyCharacteristicChanged(device, readCharacteristic, false);
-        }
-    }
-
-    private Object mLock = new Object();
-
-    private int mTimeOffset;
-
-    private byte[] getStoredValue() {
-        synchronized (mLock) {
-            return DeviceProfile.getShiftedTimeValue(mTimeOffset);
-        }
-    }
-
-    private void setStoredValue(int newOffset) {
-        synchronized (mLock) {
-            mTimeOffset = newOffset;
-        }
-    }
 }
