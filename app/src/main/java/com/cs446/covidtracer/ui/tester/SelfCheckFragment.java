@@ -40,6 +40,8 @@ public class SelfCheckFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
             @Nullable Bundle savedInstanceState) {
 
+        SelfCheck selfCheckInfo = new SelfCheck();
+
         SelfCheckFragment.stage = 0;
         SelfCheckFragment.sick = 0;
         View root = inflater.inflate(R.layout.self_check_fragment, container, false);
@@ -86,8 +88,12 @@ public class SelfCheckFragment extends Fragment {
                     }
                     else if (SelfCheckFragment.stage == 2)
                         SelfCheckFragment.sick = 1;
+                    else if (SelfCheckFragment.stage == 4)
+                        SelfCheckFragment.sick = 1;
                     else if (SelfCheckFragment.sick == 1 && SelfCheckFragment.stage == 3)
                         SelfCheckFragment.stage = -2;
+                    //else if (SelfCheckFragment.sick == 1 && SelfCheckFragment.stage == 4)
+                      //  SelfCheckFragment.stage = -2;
                     else if(SelfCheckFragment.sick == 0 && SelfCheckFragment.stage == 3){
                         SelfCheckFragment.stage = 3;
                     }
@@ -128,27 +134,35 @@ public class SelfCheckFragment extends Fragment {
 
 
             titleText.setText("Do you have any of these symptoms?\n\n");
-            bodyText.setText("- Tough time breathing \n" +
-                            "- Chest pain\n" +
-                            "- Confusion\n" +
-                            "- Losing consciousness");
+            bodyText.setText("\u2022 Tough time breathing \n" +
+                            "\u2022 Chest pain\n" +
+                            "\u2022 Confusion\n" +
+                            "\u2022 Losing consciousness");
             continueButton.setText("Continue");
         } else if (SelfCheckFragment.stage == 1) {
             titleText.setText("Do you have any of these symptoms? \n ");
 
-            bodyText.setText("- Cough\n" +
-                    "- Pink eye \n" +
-                    "- Fever\n" +
-                    "- Chills \n" +
-                    "- Shortness of breath \n" +
-                    "- Sore throat");
+            bodyText.setText("\u2022 Cough\n" +
+                    "\u2022 Pink eye \n" +
+                    "\u2022 Fever\n" +
+                    "\u2022 Chills \n" +
+                    "\u2022 Shortness of breath \n" +
+                    "\u2022 Sore throat");
             yesNo.clearCheck();
-        } else if (SelfCheckFragment.stage == 2 && SelfCheckFragment.sick ==0){
+        } else if (SelfCheckFragment.stage == 2 && SelfCheckFragment.sick ==0) {
             // ask age
             titleText.setText("What is your age?");
-            bodyText.setText("You may leave this blank. Leaving it blank will affect the accuracy of the test" );
+            bodyText.setText("You may leave this blank. Leaving it blank will affect the accuracy of the test");
             ((ViewGroup) yesNo.getParent()).addView(age);
             ((ViewGroup) yesNo.getParent()).removeView(yesNo);
+        } else if(SelfCheckFragment.stage == 3 && SelfCheckFragment.sick ==0){
+            titleText.setText("Are you in any of these at-risk groups?");
+            bodyText.setText("\u2022 Getting treatment that compromises (weakens) your immune system\n" +
+                    "\u2022 Having a condition that compromises (weakens) your immune system \n" +
+                    "\u2022 Having a chronic (long-lasting) health condition\n");
+            ((ViewGroup) titleText.getParent()).addView(yesNo);
+            ((ViewGroup) titleText.getParent()).removeView(age);
+            yesNo.clearCheck();
 
         } else if (SelfCheckFragment.stage == -1) {
             System.out.println("case -1 " + SelfCheckFragment.stage);
@@ -157,26 +171,23 @@ public class SelfCheckFragment extends Fragment {
             ((ViewGroup) continueButton.getParent()).removeView(continueButton);
             ((ViewGroup) quitButton.getParent()).removeView(bodyText);
         } else if (SelfCheckFragment.sick == 1) {
-            age.setInputType(0);
+            //age.setInputType(0);
 
             titleText.setText("You are showing some symptoms of COVID-19.");
             bodyText.setText("\nWe recommend you to get an official COVID-19 Test.\n\n" +
                     "Click the link below to find an assessment center.");
             ((ViewGroup) yesNo.getParent()).addView(assessmentLink);
 
-
-
-
             ((ViewGroup) yesNo.getParent()).removeView(yesNo);
             ((ViewGroup) continueButton.getParent()).removeView(continueButton);
 
 
-        }  else if(SelfCheckFragment.stage == 3){
+        }  else if(SelfCheckFragment.stage == 4){
             age.setInputType(0);
             titleText.setText("You are not at risk for COVID-19.");
             bodyText.setText("Stay healthy by practicing social distancing, wearing a mask, and washing your hands frequently.");
             ((ViewGroup) continueButton.getParent()).removeView(continueButton);
-            ((ViewGroup) age.getParent()).removeView(age);
+            ((ViewGroup) titleText.getParent()).removeView(yesNo);
 
         }
         SelfCheckFragment.stage++;
