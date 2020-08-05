@@ -46,7 +46,13 @@
     <string name="cdcHome"><a href="https://www.cdc.gov/coronavirus/2019-ncov/index.html">CDC: COVID-19 homepage</a></string>
     <string name="whoFAQ"><a href="https://www.who.int/emergencies/diseases/novel-coronavirus-2019/question-and-answers-hub">WHO: FAQ</a></string>
     <string name="whoFund"><a href="https://www.who.int/emergencies/diseases/novel-coronavirus-2019/advice-for-public">WHO: COVID-19 Response Fund</a></string>
+    <string name="resources">Resources</string>
     <string name="information">Information</string>
+    <string name="information_stored">Information Stored</string>
+    <string name="stored_description">The application stores the following information:</string>
+    <string name="stored_bluetood_desc">  • Your Bluetooth ID</string>
+    <string name="stored_covid_status">  • Your COVID 19 Status</string>
+    <string name="stored_connected_devices">  • Contacted Devices</string>
     <string name="add_widget">Add widget</string>
     <string-array name="covid_status_update_choices">
         <item>Negative</item>
