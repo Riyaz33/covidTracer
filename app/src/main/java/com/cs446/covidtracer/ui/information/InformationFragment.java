@@ -19,6 +19,7 @@ public class InformationFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_information, container, false);
 
+        // Initialize links
         TextView d1 = (TextView) root.findViewById(R.id.whoAdvice);
         d1.setMovementMethod(LinkMovementMethod.getInstance());
 
@@ -30,7 +31,6 @@ public class InformationFragment extends Fragment {
 
         TextView d4 = (TextView) root.findViewById(R.id.whoAdvice4);
         d4.setMovementMethod(LinkMovementMethod.getInstance());
-
 
         TextView d6 = (TextView) root.findViewById(R.id.whoAdvice6);
         d6.setMovementMethod(LinkMovementMethod.getInstance());
