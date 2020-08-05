@@ -46,7 +46,7 @@ public class PositiveDbHelper extends SQLiteOpenHelper {
     public boolean addDevice(ArrayList<Pair<String, Integer>> positiveList) {
         SQLiteDatabase db = this.getWritableDatabase();
         if (positiveList.size() > 0) {
-            String query = MessageFormat.format("INSERT INTO {0}({1}, {2}) VALUES ", PositiveEntry.TABLE_NAME, PositiveEntry.DEVICE_ADDRESS, PositiveEntry.TIME_UPLOADED);
+            String query = MessageFormat.format("REPLACE INTO {0}({1}, {2}) VALUES ", PositiveEntry.TABLE_NAME, PositiveEntry.DEVICE_ADDRESS, PositiveEntry.TIME_UPLOADED);
             for (int i = 0; i < positiveList.size(); i++) {
                 if (i != 0) {
                     query += ", ";
