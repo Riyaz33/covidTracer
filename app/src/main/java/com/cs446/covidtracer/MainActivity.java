@@ -89,9 +89,6 @@ public class MainActivity extends AppCompatActivity {
                 appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
 
-        /*
-        No bluetooth so don't need this :(
-
         if (getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
 
             // We need to enforce that location permissions are enabled.
@@ -99,7 +96,6 @@ public class MainActivity extends AppCompatActivity {
                     new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
                     1);
         }
-        */
 
         // Get Firestore Started
         db = FirebaseFirestore.getInstance();
@@ -207,10 +203,7 @@ public class MainActivity extends AppCompatActivity {
         mac = mac.substring(0, mac.length() - 1);
         return mac.toUpperCase();
     }
-}
 
-/*
-    Not needed, Bluetooth Stuff
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[]
     permissions, @NonNull int[] grantResults) {
@@ -222,11 +215,9 @@ public class MainActivity extends AppCompatActivity {
                 Intent bluetoothPeripheral = new Intent(this, PeripheralService.class);
                 startForegroundService(bluetoothPeripheral);
             } else {
-                Toast.makeText(MainActivity.this, "Contact tracing disabled. Location permissions
-                must be granted to start contact tracing.", Toast.LENGTH_LONG).show();
+                Toast.makeText(MainActivity.this, "Contact tracing disabled. Location permissions must be granted to start contact tracing.", Toast.LENGTH_LONG).show();
             }
         }
     }
 }
 
-*/
