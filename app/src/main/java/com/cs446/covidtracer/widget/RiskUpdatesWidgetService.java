@@ -45,12 +45,19 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 
     @Override
     public void onCreate() {
-        db = new TracingDbHelper(mContext);
+        //db = new TracingDbHelper(mContext);
+        try{
+            tracingItems.add(new TracingItem("abcdef", -50, 1596174793, 1596175393, 1)); // High
+            tracingItems.add(new TracingItem("abcdefg", -60, 1596174793, 1596175393, 2)); // High
+            tracingItems.add(new TracingItem("abcdef", -70, 1596174793, 1596175393, 3)); // Moderate
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void onDataSetChanged() {
-        tracingItems = db.getAllTracingItems();
+        //tracingItems = db.getAllTracingItems();
     }
 
     @Override

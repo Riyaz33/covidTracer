@@ -102,7 +102,7 @@ public class TracingDbHelper extends SQLiteOpenHelper {
                     if (!alreadyExists(items.get(j))) {
                         String query = MessageFormat.format("INSERT INTO {0}({1}, {2}, {3}, {4}, {5}) VALUES(\"{6}\", {7}, {8}, {9}, {10})",
                                 TracingEntry.TABLE_NAME,
-                                TracingEntry.DEVICE_ADDRESS,
+                            TracingEntry.DEVICE_ADDRESS,
                                 TracingEntry.START_TIME,
                                 TracingEntry.END_TIME,
                                 TracingEntry.AVERAGE_RSSI,
