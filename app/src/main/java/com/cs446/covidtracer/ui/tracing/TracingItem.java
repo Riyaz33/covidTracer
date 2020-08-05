@@ -14,14 +14,29 @@ public class TracingItem {
     private float mRssi;
     private Date mStartTime;
     private Date mEndTime;
-    private float mRiskValue;
+    private int mRiskValue;
 
-    public TracingItem(String bluetoothId, float rssi, long startTime, long endTime, float riskValue) throws ParseException {
+    public TracingItem(String bluetoothId, float rssi, long startTime, long endTime, int riskValue) throws ParseException {
         mBluetoothId = bluetoothId;
         mRssi = rssi;
         mStartTime = new Date(startTime * 1000);
         mEndTime = new Date(endTime * 1000);
         mRiskValue = riskValue;
+    }
+
+    public TracingItem(String bluetoothId, float rssi, long startTime, long endTime) throws ParseException {
+        mBluetoothId = bluetoothId;
+        mRssi = rssi;
+        mStartTime = new Date(startTime * 1000);
+        mEndTime = new Date(endTime * 1000);
+        String risk = calcRisk();
+        if(risk == "High") {
+            mRiskValue = 1;
+        } else if(risk == "Moderate") {
+            mRiskValue = 2;
+        } else {
+            mRiskValue = 3;
+        }
     }
 
     private int getDistance() { // in meters
@@ -36,6 +51,26 @@ public class TracingItem {
         long difference = mEndTime.getTime() - mStartTime.getTime();
         int timeElapsed = (int) TimeUnit.MILLISECONDS.toMinutes(difference);
         return timeElapsed;
+    }
+
+    public float getRssi(){
+        return mRssi;
+    }
+
+    public long getStartTime(){
+        return mStartTime.getTime();
+    }
+
+    public long getEndTime(){
+        return mEndTime.getTime();
+    }
+
+    public int getRiskValue() {
+        return mRiskValue;
+    }
+
+    public String getBluetoothId() {
+        return mBluetoothId;
     }
 
     public String getDurationString() {
@@ -62,6 +97,16 @@ public class TracingItem {
     }
 
     public String getRisk() {
+        int risk = mRiskValue;
+        if(risk == 1) {
+            return "High";
+        } else if(risk == 2) {
+            return "Moderate";
+        } else {
+            return "Low";
+        }
+    }
+    public String calcRisk() {
         float timeElapsed = getDuration();
         float distance = getDistance();
         float factor = timeElapsed*timeElapsed/distance;

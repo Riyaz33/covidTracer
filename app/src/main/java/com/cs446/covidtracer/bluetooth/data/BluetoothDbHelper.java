@@ -1,10 +1,16 @@
 package com.cs446.covidtracer.bluetooth.data;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.cs446.covidtracer.bluetooth.data.DeviceContract.DeviceEntry;
+import com.cs446.covidtracer.ui.tracing.TracingItem;
+import com.cs446.covidtracer.ui.tracing.data.TracingContract;
+
+import java.text.MessageFormat;
+import java.util.ArrayList;
 
 public class BluetoothDbHelper extends SQLiteOpenHelper {
 
@@ -40,5 +46,23 @@ public class BluetoothDbHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
+    }
+
+    public ArrayList<TracingItem> findPositiveId(String bluetoothID) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = MessageFormat.format("SELECT * FROM {0} WHERE {1} = \"{2}\"", DeviceEntry.TABLE_NAME, DeviceEntry.DEVICE_ADDRESS, bluetoothID);
+        Cursor cursor = db.rawQuery(query,null);
+        ArrayList<TracingItem> tracingList = new ArrayList<>();
+        while (cursor.moveToNext()) {
+            try {
+                tracingList.add(new TracingItem(cursor.getString(cursor.getColumnIndex(DeviceEntry.DEVICE_ADDRESS)),
+                        cursor.getFloat(cursor.getColumnIndex(DeviceEntry.AVERAGE_RSSI)),
+                        cursor.getInt(cursor.getColumnIndex(DeviceEntry.START_TIME)),
+                        cursor.getInt(cursor.getColumnIndex(DeviceEntry.END_TIME))));
+            } catch (Exception e) {
+                // nothing
+            }
+        }
+        return tracingList;
     }
 }
