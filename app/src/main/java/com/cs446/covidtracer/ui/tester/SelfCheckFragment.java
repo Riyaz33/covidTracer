@@ -4,9 +4,13 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+
+import androidx.annotation.ColorRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import android.text.method.LinkMovementMethod;
@@ -16,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -43,6 +48,8 @@ public class SelfCheckFragment extends Fragment {
     private Button clipboardCopy;
     private ClipboardManager clipboardManager;
     private SelfCheck selfCheckInfo;
+    private RadioButton yesRadio;
+    private RadioButton noRadio;
 
     @Nullable
     @Override
@@ -84,6 +91,9 @@ public class SelfCheckFragment extends Fragment {
 
 
         yesNo = (RadioGroup) root.findViewById(R.id.yesNo);
+       yesRadio = (RadioButton) root.findViewById(R.id.yesRadio);
+       noRadio = (RadioButton) root.findViewById(R.id.noRadio);
+
 
         yesNo.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -91,6 +101,9 @@ public class SelfCheckFragment extends Fragment {
                 System.out.println("stage " + SelfCheckFragment.stage);
                 System.out.println("sick " + SelfCheckFragment.sick);
                 if(checkedId  == R.id.yesRadio){
+                    yesRadio.setTextColor(Color.WHITE);
+                    noRadio.setTextColor(Color.DKGRAY);
+
                     Log.d("myapp", "clicked yes");
                     if(SelfCheckFragment.stage == 1){
                         SelfCheckFragment.stage = -1;
@@ -116,6 +129,8 @@ public class SelfCheckFragment extends Fragment {
                     System.out.println("stage after clicked yes " + SelfCheckFragment.stage);
 
                 } else if (checkedId == R.id.noRadio){
+                    noRadio.setTextColor(Color.WHITE);
+                    yesRadio.setTextColor(Color.DKGRAY);
                     System.out.println("clicked No");
                     if(SelfCheckFragment.stage == 0){
                         SelfCheckFragment.stage = 1;
@@ -187,6 +202,8 @@ public class SelfCheckFragment extends Fragment {
                     "\u2022 Shortness of breath \n" +
                     "\u2022 Sore throat");
             yesNo.clearCheck();
+            noRadio.setTextColor(Color.DKGRAY);
+            yesRadio.setTextColor(Color.DKGRAY);
         } else if (SelfCheckFragment.stage == 2 && SelfCheckFragment.sick ==0) {
             // ask age
             titleText.setText("What is your age?");
@@ -201,6 +218,8 @@ public class SelfCheckFragment extends Fragment {
             ((ViewGroup) titleText.getParent()).addView(yesNo);
             ((ViewGroup) titleText.getParent()).removeView(age);
             yesNo.clearCheck();
+            noRadio.setTextColor(Color.DKGRAY);
+            yesRadio.setTextColor(Color.DKGRAY);
 
         } else if (SelfCheckFragment.stage == -1) {
             System.out.println("case -1 " + SelfCheckFragment.stage);

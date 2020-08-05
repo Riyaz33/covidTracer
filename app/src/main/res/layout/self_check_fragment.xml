@@ -52,19 +52,27 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        android:orientation="horizontal"
+        >
+
 
         <RadioButton
             android:id="@+id/yesRadio"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="yes" />
+            android:text=" YES    "
+            android:background="@drawable/yes_no_background"
+            android:buttonTint="#65c7f8"
+            />
 
         <RadioButton
             android:id="@+id/noRadio"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="no" />
+            android:background="@drawable/yes_no_background"
+            android:text=" NO    "
+            android:buttonTint="#65c7f8"/>
     </RadioGroup>
 
     <EditText
@@ -109,7 +117,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="40dp"
-        android:text="Copy results to clipboard"
+        android:text=" Copy results to clipboard"
+        android:drawableLeft="@drawable/ic_info_black_24dp"
         app:layout_constraintBottom_toTopOf="@+id/quitButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"

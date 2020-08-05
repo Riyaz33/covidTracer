@@ -78,9 +78,11 @@
 
     <TextView
         android:id="@+id/selfTestDescription"
-        android:layout_width="409dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="36dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginEnd="10dp"
         android:gravity="center"
         android:text="@string/self_check_description"
         android:textSize="18sp"
