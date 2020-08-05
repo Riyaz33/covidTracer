@@ -27,7 +27,6 @@ public class RiskUpdatesWidgetProvider extends AppWidgetProvider {
 
             PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
             rv.setOnClickPendingIntent(R.id.tracingCardWidget, pendingIntent);
-            //add empty view when no list items?
             appWidgetManager.updateAppWidget(appWidgetId, rv);
         }
 
@@ -41,7 +40,7 @@ public class RiskUpdatesWidgetProvider extends AppWidgetProvider {
 
     @Override
     public void onDisabled(Context context) {
-        // Enter relevant functionality for when the last widget is disabled
+        super.onDisabled(context);
     }
 }
 

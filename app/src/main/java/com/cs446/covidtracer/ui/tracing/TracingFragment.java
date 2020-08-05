@@ -1,72 +1,62 @@
 package com.cs446.covidtracer.ui.tracing;
+import androidx.annotation.Nullable;
+import androidx.loader.app.LoaderManager.LoaderCallbacks;
 
-import android.content.ContentValues;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import androidx.annotation.ContentView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.loader.app.LoaderManager;
+import androidx.loader.content.Loader;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.cs446.covidtracer.R;
 import com.cs446.covidtracer.ui.tracing.data.TracingDbHelper;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.TimeZone;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class TracingFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
+    private ArrayList<TracingItem> tracingItems;
 
-    public View onCreateView(@NonNull LayoutInflater inflater,
+    public View onCreateView(@NonNull final LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_tracing, container, false);
+        final View root = inflater.inflate(R.layout.fragment_tracing, container, false);
+        return root;
+    }
 
-        // start item list
-        TracingDbHelper db = new TracingDbHelper(getActivity().getApplicationContext());
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        updateUi();
+    }
+
+//    @Override
+//    public void onResume() {
+//        super.onResume();
+//        updateUi();
+//    }
+
+    private void updateUi() {
+        final TracingDbHelper db = new TracingDbHelper(getActivity().getApplicationContext());
         ArrayList<TracingItem> tracingItems = db.getAllTracingItems();
+        tracingItems = db.getAllTracingItems();
 
-//            tracingItems.add(new TracingItem("abcdef", -50, 1596174793, 1596175393)); // High
-//            tracingItems.add(new TracingItem("abcdefg", -60, 1596575855, 1596576455)); // High
-//            tracingItems.add(new TracingItem("abcdef", -70, 1596575855, 1596576455)); // Moderate
-//            tracingItems.add(new TracingItem("abcdefg", -80, 1596575855, 1596576455)); // Moderate
-//            tracingItems.add(new TracingItem("abcdef", -90, 1596575855, 1596576455)); // Low
-//            tracingItems.add(new TracingItem("abcdefg", -100, 1596575855, 1596576455)); // Low
-//            tracingItems.add(new TracingItem("abcdef", -50, 1596575855, 1596576155)); // High
-//            tracingItems.add(new TracingItem("abcdefg", -60, 1596575855, 1596576155)); // Moderate
-//            tracingItems.add(new TracingItem("abcdef", -70, 1596575855, 1596576155)); // Moderate
-//            tracingItems.add(new TracingItem("abcdefg", -80, 1596575855, 1596576155)); // Low
-//            tracingItems.add(new TracingItem("abcdef", -90, 1596575855, 1596576155)); // Low
-//            tracingItems.add(new TracingItem("abcdefg", -100, 1596575855, 1596576155)); // Low
-//            tracingItems.add(new TracingItem("abcdef", -50, 1596575855, 1596575915)); // High
-//            tracingItems.add(new TracingItem("abcdefg", -60, 1596575855, 1596575915)); // Moderate
-//            tracingItems.add(new TracingItem("abcdef", -70, 1596575855, 1596575915)); // low
-//            tracingItems.add(new TracingItem("abcdefg", -80, 1596575855, 1596575915)); // low
-//            tracingItems.add(new TracingItem("abcdef", -90, 1596575855, 1596575915)); // low
-//            tracingItems.add(new TracingItem("abcdefg", -100, 1596575855, 1596575915)); // low
-        mRecyclerView = root.findViewById(R.id.tracingRecyclerView);
+        mRecyclerView = getView().findViewById(R.id.tracingRecyclerView);
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(getActivity());
         mAdapter = new TracingAdapter(tracingItems);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
-        // end
-        if (tracingItems.size() == 0) {
-            final View routeListingsView = inflater.inflate(R.layout.fragment_tracing, null);
-            TextView mNoRisk = (TextView) routeListingsView.findViewById(R.id.empty_risk);
-            mNoRisk.setText("No Risks found.");
-            return routeListingsView;
-        }
-        return root;
     }
+
 }

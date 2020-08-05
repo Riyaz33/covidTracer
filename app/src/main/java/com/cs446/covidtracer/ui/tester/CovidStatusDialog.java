@@ -73,8 +73,7 @@ public class CovidStatusDialog extends DialogFragment {
                         String time = ""+epochTime;
                         data.put("userStatus",statusList[position]);
                         data.put("timestamp",time);
-                        // DocumentReference doc = db.collection("Users").document( "42:FC:A4:80:82:8D"); // testing purpose
-                        DocumentReference doc = db.collection("Users").document( macAddr);
+                        DocumentReference doc = db.collection("Users").document( "42:FC:A4:80:82:8D"); // testing purpose
                         doc.update(data);
                         // Code to update COVID-19 Status on the database <- End
                         Intent intent = getActivity().getIntent();
@@ -85,8 +84,7 @@ public class CovidStatusDialog extends DialogFragment {
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-
-
+                        //do nothing if cancelled
                     }
                 });
 

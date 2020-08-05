@@ -34,6 +34,14 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/covid_status_title" />
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/ic_label_orange_24dp"
+        android:layout_marginRight="4dp"
+        app:layout_constraintEnd_toStartOf="@id/covid_status_description"
+        app:layout_constraintTop_toTopOf="@id/covid_status_description"
+        app:layout_constraintBottom_toBottomOf="@id/covid_status_description"/>
 
     <Button
         android:id="@+id/update_status"
