@@ -26,7 +26,9 @@ public class TracingFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
-    private ArrayList<TracingItem> tracingItems;
+    private TextView emptyStateTextView;
+    private TextView dummyDataTextView;
+    private boolean haveDummyData;
 
     public View onCreateView(@NonNull final LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -37,20 +39,29 @@ public class TracingFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        emptyStateTextView = getView().findViewById(R.id.empty_risk);
+        dummyDataTextView = getView().findViewById(R.id.dummy_data_note);
+        haveDummyData = true;
         updateUi();
-    }
 
-//    @Override
-//    public void onResume() {
-//        super.onResume();
-//        updateUi();
-//    }
+    }
 
     private void updateUi() {
         final TracingDbHelper db = new TracingDbHelper(getActivity().getApplicationContext());
         ArrayList<TracingItem> tracingItems = db.getAllTracingItems();
         tracingItems = db.getAllTracingItems();
 
+        // To remove dummy data if real data appears
+        if(haveDummyData && tracingItems.size() > 3) {
+            db.removeFakeData();
+            dummyDataTextView.setText("");
+            haveDummyData = false;
+        }
+
+        // Handling no cards
+        if(tracingItems.size() == 0){
+            emptyStateTextView.setText(R.string.no_risk_found);
+        }
         mRecyclerView = getView().findViewById(R.id.tracingRecyclerView);
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(getActivity());

@@ -60,7 +60,7 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
     public RemoteViews getViewAt(int position) {
         RemoteViews rv = new RemoteViews(mContext.getPackageName(), R.layout.tracing_list_item_widget);
         rv.setTextViewText(R.id.riskFactor, tracingItems.get(position).getRisk());
-        rv.setTextViewText(R.id.dateFactor, tracingItems.get(position).getDaysAgo());
+        rv.setTextViewText(R.id.dateFactor, tracingItems.get(position).getDaysAgo() + " Ago");
         rv.setInt(R.id.tracingCardWidget, "setBackgroundColor", tracingItems.get(position).getBackgroundColor());
 
         return rv;

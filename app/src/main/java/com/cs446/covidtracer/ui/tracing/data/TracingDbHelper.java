@@ -42,11 +42,11 @@ public class TracingDbHelper extends SQLiteOpenHelper {
 
         // Execute the SQL statement
         db.execSQL(SQL_CREATE_DEVICE_TABLE);
+
+        // Adding dummy data in the beginning of the app
         String item = MessageFormat.format("INSERT INTO {0}({1}, {2}, {3}, {4}, {5}) VALUES(\"abcdef\", 1596174793, 1596175393, -30, 1)", TracingEntry.TABLE_NAME, TracingEntry.DEVICE_ADDRESS, TracingEntry.START_TIME, TracingEntry.END_TIME, TracingEntry.AVERAGE_RSSI, TracingEntry.RISK_VALUE);
         db.execSQL(item);
         item = MessageFormat.format("INSERT INTO {0}({1}, {2}, {3}, {4}, {5}) VALUES(\"abcdef\", 1596174793, 1596175393, -30, 2)", TracingEntry.TABLE_NAME, TracingEntry.DEVICE_ADDRESS, TracingEntry.START_TIME, TracingEntry.END_TIME, TracingEntry.AVERAGE_RSSI, TracingEntry.RISK_VALUE);
-        db.execSQL(item);
-        item = MessageFormat.format("INSERT INTO {0}({1}, {2}, {3}, {4}, {5}) VALUES(\"abcdef\", 1596174793, 1596175393, -50, 2)", TracingEntry.TABLE_NAME, TracingEntry.DEVICE_ADDRESS, TracingEntry.START_TIME, TracingEntry.END_TIME, TracingEntry.AVERAGE_RSSI, TracingEntry.RISK_VALUE);
         db.execSQL(item);
         item = MessageFormat.format("INSERT INTO {0}({1}, {2}, {3}, {4}, {5}) VALUES(\"abcdef\", 1596174793, 1596175393, -50, 3)", TracingEntry.TABLE_NAME, TracingEntry.DEVICE_ADDRESS, TracingEntry.START_TIME, TracingEntry.END_TIME, TracingEntry.AVERAGE_RSSI, TracingEntry.RISK_VALUE);
         db.execSQL(item);
@@ -57,6 +57,7 @@ public class TracingDbHelper extends SQLiteOpenHelper {
 
     }
 
+    // this returns all the tracing items to be displayed in the tab
     public ArrayList<TracingItem> getAllTracingItems() {
         SQLiteDatabase db = this.getWritableDatabase();
         ArrayList<TracingItem> tracingList = new ArrayList<>();
@@ -83,6 +84,7 @@ public class TracingDbHelper extends SQLiteOpenHelper {
         return tracingList;
     }
 
+    // while adding new tracing items, this checks if its not a duplicate
     public boolean alreadyExists(TracingItem item){
         SQLiteDatabase db = this.getWritableDatabase();
         String query = MessageFormat.format("SELECT * FROM {0} WHERE {1} = \"{2}\" AND {3} = {4}", TracingEntry.TABLE_NAME,TracingEntry.DEVICE_ADDRESS, item.getBluetoothId(), TracingEntry.START_TIME, Long.toString(item.getStartTime() / 1000));
@@ -92,6 +94,8 @@ public class TracingDbHelper extends SQLiteOpenHelper {
         }
         return false;
     }
+
+    // this compares list of positive ID's from Firebase to Local storage
     public boolean checkAndAddTracingItems(ArrayList<Pair<String, Long>> positiveList, Context context) {
         SQLiteDatabase db = this.getWritableDatabase();
         BluetoothDbHelper bluetoothDb = new BluetoothDbHelper(context);
@@ -120,6 +124,18 @@ public class TracingDbHelper extends SQLiteOpenHelper {
             return false;
         }
         return true;
+    }
+
+    // this removes fake data when real data comes
+    public boolean removeFakeData(){
+        try{
+            SQLiteDatabase db = this.getWritableDatabase();
+            String query = MessageFormat.format("DELETE FROM {0} WHERE {1} = \"abcdef\"", TracingEntry.TABLE_NAME,TracingEntry.DEVICE_ADDRESS);
+            db.execSQL(query);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 }
 

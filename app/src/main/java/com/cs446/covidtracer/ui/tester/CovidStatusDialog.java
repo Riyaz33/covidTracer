@@ -73,7 +73,8 @@ public class CovidStatusDialog extends DialogFragment {
                         String time = ""+epochTime;
                         data.put("userStatus",statusList[position]);
                         data.put("timestamp",time);
-                        DocumentReference doc = db.collection("Users").document( "42:FC:A4:80:82:8D"); // testing purpose
+                        // DocumentReference doc = db.collection("Users").document( "42:FC:A4:80:82:8D"); // testing purpose. Do not remove.
+                        DocumentReference doc = db.collection("Users").document( macAddr); // real use. Do not remove.
                         doc.update(data);
                         // Code to update COVID-19 Status on the database <- End
                         Intent intent = getActivity().getIntent();
